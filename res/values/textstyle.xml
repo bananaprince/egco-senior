@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="largeBlackText">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/Black</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="mediumBlackText">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/Black</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="smallBlackText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/Black</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="xSmallBlackText">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/Black</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+</resources>

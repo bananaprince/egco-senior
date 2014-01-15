@@ -1,0 +1,18 @@
+<resources>
+
+    <string name="app_name">StoreFinderProject</string>
+    
+    <string name="mainpage_main_welcome_message1">Welcome...</string>
+    <string name="mainpage_main_search_message1">Let\'s find what you want!</string>
+    <string name="mainpage_main_search_hinttext">Type your query here</string>
+    <string name="mainpage_main_search_message2">or let\'s see what is hot!</string>
+    
+    <string name="mainpage_main_hottag_temp">#HotTag</string>
+    
+    <string name="banpage_message1">Sorry, service is temporary unavailable.</string>
+    <string name="banpage_message2">Please contract us for more details.</string>
+    <string name="banpage_case_db_failure">Connection problem</string>
+    <string name="banpage_case_account_or_device">Account does not match IMEI</string>
+    <string name="banpage_case_break_term">Break a term of service</string>
+
+</resources>

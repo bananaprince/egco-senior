@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/Gray" >
+
+    <ImageView
+        android:id="@+id/product_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:src="@drawable/pic_shirt200px" />
+    
+    <TextView 
+        android:id="@+id/product_discount"
+        style="@style/smallBlackText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/product_image"
+        android:layout_alignLeft="@+id/product_image"
+        android:padding="4dp"
+        android:text="-30%"
+        android:textColor="@color/Very_Red"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/product_image"
+        android:layout_alignBottom="@+id/product_image"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:background="@drawable/gradient_bg" >
+
+        <TextView
+            android:id="@+id/product_price"
+            style="@style/smallBlackText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="4dp"
+            android:layout_gravity="right"
+            android:text="199.00B" />
+
+        <TextView
+            android:id="@+id/product_shipping"
+            style="@style/xSmallBlackText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2dp"
+            android:paddingRight="4dp"
+            android:layout_gravity="right"
+            android:text="+50.00B Shipping" />
+    </LinearLayout>
+
+</RelativeLayout>
