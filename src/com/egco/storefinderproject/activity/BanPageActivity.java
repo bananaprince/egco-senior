@@ -20,7 +20,7 @@ public class BanPageActivity extends Activity {
 
 		TextView banReasonTextView = (TextView) findViewById(R.id.banpage_reason);
 		banReasonTextView.setText(this.getIntent().getStringExtra(
-				ApplicationConstant.DENIED_SERVICE_MESSAGE));
+				ApplicationConstant.INTENT_DENIED_SERVICE_MESSAGE));
 
 		// Setup ActionBar
 		actionBar = getActionBar();

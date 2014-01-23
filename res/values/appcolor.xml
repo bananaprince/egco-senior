@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="Red_Main">#C23E50</color>
     <color name="Red_Main50">#7FC23E50</color>
     <color name="Very_Red">#FF0000</color>
-    <color name="Blue_Main">#5773ab</color>
-    <color name="Blue_Main50">#7F5773ab</color>
+    <color name="Blue_Main">#5773AB</color>
+    <color name="Blue_Main50">#7F5773AB</color>
+    <color name="Yellow_Main">#F9D445</color>
+    <color name="Yellow_Main50">#7FF9D445</color>
     <color name="White">#FFFFFF</color>
+    <color name="White50">#7FFFFFFF</color>
+    <color name="Green_Main">#40826D</color>
+    <color name="Green_Main50">#7F40826D</color>
     <color name="Black">#000000</color>
     <color name="Gray">#A7B0AD</color>
     <color name="Transparent">#00000000</color>
+
 </resources>

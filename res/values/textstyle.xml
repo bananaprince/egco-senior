@@ -2,16 +2,30 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="largeBlackText">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/Black</item>
         <item name="android:fontFamily">sans-serif-thin</item>
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="largeBlackTextBold">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/Black</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="mediumBlackText">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/Black</item>
         <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="mediumBlackTextBold">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/Black</item>
+        <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textStyle">normal</item>
     </style>
 
@@ -22,8 +36,15 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="smallBlackTextBold">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/Black</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="xSmallBlackText">
-        <item name="android:textSize">11sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/Black</item>
         <item name="android:fontFamily">sans-serif-thin</item>
         <item name="android:textStyle">normal</item>

@@ -30,9 +30,11 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ProgressBar;
 
 import com.egco.storefinderproject.R;
 import com.egco.storefinderproject.constant.ApplicationConstant;
+import com.egco.storefinderproject.utils.ToastUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
@@ -47,6 +49,8 @@ public class LoginPageActivity extends Activity implements ConnectionCallbacks,
 	private ActionBar actionBar;
 	private Context mContext;
 
+	private ProgressBar progressBar;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,6 +62,10 @@ public class LoginPageActivity extends Activity implements ConnectionCallbacks,
 		// Set Action Bar
 		actionBar = getActionBar();
 		actionBar.hide();
+
+		// Set progress bar
+		progressBar = (ProgressBar) findViewById(R.id.loginpage_progressbar);
+		progressBar.setVisibility(View.GONE);
 
 		// Init PlusClient Object
 		gPlusClient = new PlusClient.Builder(this, this, this).setScopes(
@@ -71,6 +79,8 @@ public class LoginPageActivity extends Activity implements ConnectionCallbacks,
 		@Override
 		public void onClick(View v) {
 			if (!gPlusClient.isConnected()) {
+				progressBar.setVisibility(View.VISIBLE);
+				progressBar.bringToFront();
 				gPlusClient.connect();
 			}
 
@@ -114,7 +124,7 @@ public class LoginPageActivity extends Activity implements ConnectionCallbacks,
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-
+		
 		TelephonyManager telMng = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		String userEmail = gPlusClient.getAccountName();
 		String userIMEI = telMng.getDeviceId();
@@ -131,7 +141,7 @@ public class LoginPageActivity extends Activity implements ConnectionCallbacks,
 
 		/*
 		 * Note : Return of this task -2 : Application Error -1 : Banned 0 : New
-		 * User 1 : Activated User 2 : Verified User
+		 * User 1 : Merchant User 2 : Verified User
 		 */
 
 		private final String PARAM_USER_EMAIL = "email";
@@ -160,7 +170,7 @@ public class LoginPageActivity extends Activity implements ConnectionCallbacks,
 
 				StringBuilder sb = new StringBuilder();
 				sb.append(ApplicationConstant.SERVICE_URL);
-				sb.append(ApplicationConstant.SERVICE_CHECK_USER_STATUS);
+				sb.append(ApplicationConstant.SERVICE_ADD_CHECK_USER);
 				String url = sb.toString();
 
 				Log.v("url=", url);
@@ -199,12 +209,12 @@ public class LoginPageActivity extends Activity implements ConnectionCallbacks,
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			try {
 				jsonDataObject = new JSONObject(jsonDataLine);
-				
+
 				Log.v("result", jsonDataLine);
-				
+
 				operate = jsonDataObject.getString(FIELD_USER_OPERATION);
 				if (OPERATE_NON.equalsIgnoreCase(operate)) {
 					Log.v("service", "non");
@@ -217,11 +227,11 @@ public class LoginPageActivity extends Activity implements ConnectionCallbacks,
 				} else if (OPERATE_READ.equalsIgnoreCase(operate)) {
 					Log.v("service", "read");
 					int userStatus = jsonDataObject.getInt(FIELD_USER_STATUS);
-						if(userStatus == -1) {
-							message = getString(R.string.banpage_case_break_term);
-						} else {
-							message = jsonDataObject.getString(FIELD_USER_MESSAGE);
-						}
+					if (userStatus == -1) {
+						message = getString(R.string.banpage_case_break_term);
+					} else {
+						message = jsonDataObject.getString(FIELD_USER_MESSAGE);
+					}
 					return userStatus;
 				}
 
@@ -234,21 +244,16 @@ public class LoginPageActivity extends Activity implements ConnectionCallbacks,
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-
+			
 			Intent intent;
 			if (result < 0) {
 				intent = new Intent(mContext, BanPageActivity.class);
+				intent.putExtra(ApplicationConstant.INTENT_DENIED_SERVICE_MESSAGE, message);
 			} else {
 				intent = new Intent(mContext, MainPageActivity.class);
 			}
-			intent.putExtra(ApplicationConstant.DENIED_SERVICE_MESSAGE, message);
 			startActivity(intent);
-		}
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
+			progressBar.setVisibility(View.GONE);
 		}
 
 	}

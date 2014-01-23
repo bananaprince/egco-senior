@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Blue_Main" >
+
+    <ProgressBar
+        android:id="@+id/storedetailpage_progressbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/Blue_Main"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/rounded_corner_bg"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/storedetailpage_message1"
+                style="@style/largeBlackTextBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/storedetailpage_message1" />
+
+            <TextView
+                android:id="@+id/storedetailpage_message2"
+                style="@style/mediumBlackTextBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/storedetailpage_message2" />
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" >
+
+                <TextView
+                    android:id="@+id/storedetailpage_storename"
+                    style="@style/mediumBlackTextBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/rounded_corner_bg"
+                    android:text="@string/storedetailpage_storename" />
+
+                <EditText
+                    android:id="@+id/storedetailpage_storename_value"
+                    style="@style/mediumBlackText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/White50"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:inputType="text" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" >
+
+                <TextView
+                    android:id="@+id/storedetailpage_storedetail"
+                    style="@style/mediumBlackTextBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill_vertical"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/rounded_corner_bg"
+                    android:text="@string/storedetailpage_storedetail" />
+
+                <EditText
+                    android:id="@+id/storedetailpage_storedetail_value"
+                    style="@style/mediumBlackText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/White50"
+                    android:lines="3"
+                    android:maxLength="140"
+                    android:maxLines="3"
+                    android:padding="5dp"
+                    android:inputType="text" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" >
+
+                <TextView
+                    android:id="@+id/storedetailpage_storecontract"
+                    style="@style/mediumBlackTextBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill_vertical"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/rounded_corner_bg"
+                    android:text="@string/storedetailpage_storecontract" />
+
+                <EditText
+                    android:id="@+id/storedetailpage_storecontract_value"
+                    style="@style/mediumBlackText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/White50"
+                    android:lines="3"
+                    android:maxLength="140"
+                    android:maxLines="3"
+                    android:padding="5dp"
+                    android:inputType="text" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" >
+
+                <TextView
+                    android:id="@+id/storedetailpage_storetel"
+                    style="@style/mediumBlackTextBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/rounded_corner_bg"
+                    android:text="@string/storedetailpage_storetel" />
+
+                <EditText
+                    android:id="@+id/storedetailpage_storetel_value"
+                    style="@style/mediumBlackText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/White50"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:inputType="phone" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" >
+
+                <TextView
+                    android:id="@+id/storedetailpage_storemail"
+                    style="@style/mediumBlackTextBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/rounded_corner_bg"
+                    android:text="@string/storedetailpage_storemail" />
+
+                <EditText
+                    android:id="@+id/storedetailpage_storemail_value"
+                    style="@style/mediumBlackText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/White50"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:inputType="textWebEmailAddress" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+    <View
+        style="@style/divider"
+        android:layout_above="@+id/storedetailpage_storepage_button" />
+
+    <Button
+        android:id="@+id/storedetailpage_storepage_button"
+        style="@style/smallBlackTextBold"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/circle_button_bg_white50"
+        android:drawableTop="@drawable/save_as_50"
+        android:padding="5dp"
+        android:text="@string/storedetailpage_finishbutton" />
+
+</RelativeLayout>

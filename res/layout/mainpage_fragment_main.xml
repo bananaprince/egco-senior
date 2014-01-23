@@ -1,110 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainpage_mainlayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Red_Main"
-    android:orientation="vertical" >
+    android:background="@color/Red_Main" >
+
+    <ProgressBar
+        android:id="@+id/mainpage_progressbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@drawable/rounded_corner_bg"
-        android:orientation="horizontal"
-        android:padding="5dp" >
-
-        <ImageView
-            android:id="@+id/mainpage_user_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:orientation="vertical"
-            android:padding="3dp" >
-
-            <TextView
-                android:id="@+id/mainpage_welcomeuser"
-                style="@style/mediumBlackText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mainpage_main_welcome_message1" />
-
-            <TextView
-                android:id="@+id/mainpage_username"
-                style="@style/largeBlackText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="username" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@drawable/rounded_corner_bg"
         android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/mainpage_search_message1"
-            style="@style/largeBlackText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mainpage_main_search_message1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/Red_Main50"
-            android:orientation="horizontal" >
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp" >
-
-                <EditText
-                    android:id="@+id/mainpage_search_query_highlight"
-                    style="@style/mediumBlackText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/mainpage_search_query"
-                    android:background="@null"
-                    android:maxLines="1"
-                    android:textColor="@color/Transparent" />
-
-                <EditText
-                    android:id="@+id/mainpage_search_query"
-                    style="@style/mediumBlackText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:hint="@string/mainpage_main_search_hinttext"
-                    android:maxLines="1"
-                    android:textColorHint="@color/White" />
-            </RelativeLayout>
+            android:layout_margin="5dp"
+            android:background="@drawable/rounded_corner_bg"
+            android:orientation="horizontal"
+            android:padding="5dp" >
 
             <ImageView
-                android:id="@+id/mainpage_search_submit_query_img"
+                android:id="@+id/mainpage_user_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:padding="5dp"
-                android:src="@drawable/search" />
+                android:src="@drawable/ic_launcher" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:orientation="vertical"
+                android:padding="3dp" >
+
+                <TextView
+                    android:id="@+id/mainpage_welcomeuser"
+                    style="@style/mediumBlackTextBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mainpage_main_welcome_message1" />
+
+                <TextView
+                    android:id="@+id/mainpage_username"
+                    style="@style/largeBlackText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="username" />
+            </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/mainpage_search_message2"
-            style="@style/largeBlackText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/mainpage_main_search_message2" />
+            android:layout_margin="5dp"
+            android:background="@drawable/rounded_corner_bg"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/mainpage_search_message1"
+                style="@style/largeBlackTextBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mainpage_main_search_message1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/Red_Main50"
+                android:orientation="horizontal" >
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="5dp" >
+
+                    <EditText
+                        android:id="@+id/mainpage_search_query_highlight"
+                        style="@style/mediumBlackText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/mainpage_search_query"
+                        android:background="@null"
+                        android:maxLines="1"
+                        android:textColor="@color/Transparent" />
+
+                    <EditText
+                        android:id="@+id/mainpage_search_query"
+                        style="@style/mediumBlackText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="@string/mainpage_main_search_hinttext"
+                        android:maxLines="1"
+                        android:textColorHint="@color/White" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/mainpage_search_submit_query_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="5dp"
+                    android:src="@drawable/search_50" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/mainpage_search_message2"
+                style="@style/largeBlackTextBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mainpage_main_search_message2" />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <View
+        style="@style/divider"
+        android:layout_above="@+id/mainpage_storepage_button" />
+
+    <Button
+        android:id="@+id/mainpage_storepage_button"
+        style="@style/smallBlackTextBold"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/circle_button_bg_white50"
+        android:drawableTop="@drawable/shop_50"
+        android:padding="5dp"
+        android:text="@string/mainpage_main_storepage_button" />
+
+</RelativeLayout>

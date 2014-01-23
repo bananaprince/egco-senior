@@ -53,7 +53,8 @@
         </activity>
         <activity
             android:name=".activity.ResultPageActivity"
-            android:label="StoreFinder ResultPage" >
+            android:label="StoreFinder ResultPage"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,14 +63,42 @@
         </activity>
         <activity
             android:name=".activity.StorePageActivity"
-            android:label="StoreFinder StorePage" >
+            android:label="StoreFinder StorePage"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-                <activity
+        <activity
+            android:name=".activity.StoreDetailPageActivity"
+            android:label="StoreFinder StoreDetailPage"
+            android:screenOrientation="portrait"
+            android:noHistory="true">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ProductDetailPageActivity"
+            android:label="StoreFinder ProductDetailPage"
+            android:screenOrientation="portrait"
+            android:noHistory="true" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ImageCropperPageActivity"
+            android:label="StoreFinder ImageCropperPage"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.BanPageActivity"
-            android:label="StoreFinder BanPage" >
+            android:label="StoreFinder BanPage"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

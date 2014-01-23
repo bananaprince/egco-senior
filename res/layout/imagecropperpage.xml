@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.egco.storefinderproject"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Black" >
+
+    <ProgressBar
+        android:id="@+id/imagecropperpage_progressbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true" />
+
+    <com.edmodo.cropper.CropImageView
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imagecropperpage_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:imageResource="@drawable/add_image_512" />
+
+    <View
+        style="@style/divider"
+        android:layout_above="@+id/imagecropperpage_button_layout" />
+
+    <RelativeLayout
+        android:id="@+id/imagecropperpage_button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+       	android:paddingTop="5dp"
+       	android:paddingBottom="5dp"
+        android:background="@color/Blue_Main" >
+
+        <Button
+            android:id="@+id/imagecropperpage_submit_button"
+            style="@style/smallBlackTextBold"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/circle_button_bg_white50"
+            android:drawableTop="@drawable/save_as_50"
+            android:padding="5dp"
+            android:text="@string/imagecropperpage_submit_button" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -2,6 +2,8 @@ package com.egco.storefinder.model;
 
 import java.io.Serializable;
 
+import com.egco.storefinderproject.constant.ApplicationConstant;
+
 public class ProductModel implements Serializable,Comparable<ProductModel>{
 
 	private static final long serialVersionUID = 1588383123523114312L;
@@ -13,7 +15,28 @@ public class ProductModel implements Serializable,Comparable<ProductModel>{
 	private double shippingCost;
 	private long popularity;
 	private String productName;
+	private boolean available;
+	private String description;
+	private int type;
 	
+	public boolean isAvailable() {
+		return available;
+	}
+	public void setAvailable(boolean available) {
+		this.available = available;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
 	public String getProductName() {
 		return productName;
 	}
@@ -28,6 +51,9 @@ public class ProductModel implements Serializable,Comparable<ProductModel>{
 	}
 	public String getProductImgURL() {
 		return productImgURL;
+	}
+	public String getProductImgURLFullPath() {
+		return ApplicationConstant.IMAGE_PATH_PREFIX+productImgURL.replace(" ", "%20");
 	}
 	public void setProductImgURL(String productImgURL) {
 		this.productImgURL = productImgURL;
