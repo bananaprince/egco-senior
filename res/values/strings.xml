@@ -21,10 +21,13 @@
     <string name="storedetailpage_storemail">Store e-mail: </string>
     <string name="storedetailpage_finishbutton">Finish</string>
     
-    <string name="productdetailpage_productname">Product:</string>
+    <string name="productdetailpage_productname">Name:</string>
+    <string name="productdetailpage_producttype">Type:</string>
     <string name="productdetailpage_productprice">Price:</string>
+    <string name="productdetailpage_productdiscount">Discount Price:</string>
     <string name="productdetailpage_productdescription">Description:</string>
     <string name="productdetailpage_productshipping">Shipping:</string>
+    <string name="productdetailpage_productavailable">Available:</string>
     <string name="productdetailpage_submit_additem">Add</string>
     <string name="productdetailpage_submit_finish">Finish</string>
     <string name="productdetailpage_submit_ok">OK</string>

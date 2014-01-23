@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import com.egco.storefinder.model.ProductModel;
 import com.egco.storefinderproject.R;
+import com.egco.storefinderproject.adapter.StoreDetailPageSpinnerAdapter;
 import com.egco.storefinderproject.constant.ApplicationConstant;
 import com.egco.storefinderproject.utils.BitmapUtils;
 import com.egco.storefinderproject.utils.ToastUtils;
@@ -52,6 +53,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class ProductDetailPageActivity extends Activity implements
@@ -69,10 +71,14 @@ public class ProductDetailPageActivity extends Activity implements
 	private EditText productDescriptionValue;
 	private EditText productShippingValue;
 	private Button submitButton;
-	private Button cancleButton;
-	
+	private Spinner productTypeSpinner;
+	private EditText productDiscountValue;
+	private EditText productDiscountPercentage;
+
+	private StoreDetailPageSpinnerAdapter spinnerAdapter;
+
 	private ProductModel editItemModel;
-	
+
 	private Bitmap productImgBitmap;
 
 	private ProgressBar progressBar;
@@ -99,20 +105,30 @@ public class ProductDetailPageActivity extends Activity implements
 		productDescriptionValue = (EditText) findViewById(R.id.productdetailpage_product_description_value);
 		productShippingValue = (EditText) findViewById(R.id.productdetailpage_product_shipping_value);
 		submitButton = (Button) findViewById(R.id.productdetailpage_submit_button);
-		cancleButton = (Button) findViewById(R.id.productdetailpage_cancle_button);
-		
+		productTypeSpinner = (Spinner) findViewById(R.id.productdetailpage_product_type_spinner_value);
+		productDiscountValue = (EditText) findViewById(R.id.productdetailpage_product_discount_value);
+		productDiscountPercentage = (EditText) findViewById(R.id.productdetailpage_product_discount_percentage);
+
+		spinnerAdapter = new StoreDetailPageSpinnerAdapter(mContext);
+		productTypeSpinner.setAdapter(spinnerAdapter);
+
 		productImg.setOnClickListener(onAddProductImgClick);
-		productPriceValue.setOnFocusChangeListener(onMoneyFieldFocusChange);
 		productShippingValue.setOnFocusChangeListener(onMoneyFieldFocusChange);
 
 		if (ApplicationConstant.ACTION_PRODUCT_DETAIL_ADD
 				.equalsIgnoreCase(action)) {
 			// add new item case
 			initAdd();
+			productPriceValue.setOnFocusChangeListener(onMoneyFieldFocusChange);
 		} else if (ApplicationConstant.ACTION_PRODUCT_DETAIL_EDIT
 				.equalsIgnoreCase(action)) {
 			// edit item case
 			initEdit();
+			productPriceValue.setOnFocusChangeListener(onEditModeMoneyFocusChange);
+			productDiscountValue
+					.setOnFocusChangeListener(onEditModeMoneyFocusChange);
+			productDiscountPercentage
+					.setOnFocusChangeListener(onEditModeMoneyFocusChange);
 		}
 	}
 
@@ -120,15 +136,17 @@ public class ProductDetailPageActivity extends Activity implements
 		submitButton.setOnClickListener(onAddSubmitButtonClick);
 
 	}
-	
-	void initEdit() {
-		editItemModel = (ProductModel)getIntent().getSerializableExtra(ApplicationConstant.INTENT_PRODUCT_MODEL);
 
-		Picasso.with(mContext).load(editItemModel.getProductImgURLFullPath()).placeholder(R.drawable.add_image_512).into(productImg);
+	void initEdit() {
+		editItemModel = (ProductModel) getIntent().getSerializableExtra(
+				ApplicationConstant.INTENT_PRODUCT_MODEL);
+
+		Picasso.with(mContext).load(editItemModel.getProductImgURLFullPath())
+				.placeholder(R.drawable.add_image_512).into(productImg);
 		productNameValue.setText(editItemModel.getProductName());
-		productPriceValue.setText(""+editItemModel.getPrice());
+		productPriceValue.setText("" + editItemModel.getPrice());
 		productDescriptionValue.setText(editItemModel.getDescription());
-		productShippingValue.setText(""+editItemModel.getShippingCost());
+		productShippingValue.setText("" + editItemModel.getShippingCost());
 	}
 
 	@Override
@@ -137,7 +155,7 @@ public class ProductDetailPageActivity extends Activity implements
 
 		if (requestCode == ApplicationConstant.REQUEST_CODE_PHOTO_PICKER)
 			if (resultCode == RESULT_OK) {
-				
+
 				Bitmap productImageBitmap = (Bitmap) data
 						.getParcelableExtra(ApplicationConstant.INTENT_CROPPED_IMAGE);
 				productImageBitmap = BitmapUtils.addWatermark(
@@ -146,7 +164,9 @@ public class ProductDetailPageActivity extends Activity implements
 				productImgBitmap = productImageBitmap;
 			} else {
 				Log.v("product detauk", "didn't get image");
-				ToastUtils.getToast(mContext, "Something wrong", ToastUtils.STYLE_ERROR_RED, ToastUtils.DURATION_SHORT).show();
+				ToastUtils.getToast(mContext, "Something wrong",
+						ToastUtils.STYLE_ERROR_RED, ToastUtils.DURATION_SHORT)
+						.show();
 			}
 
 	}
@@ -164,17 +184,35 @@ public class ProductDetailPageActivity extends Activity implements
 			progressBar.setVisibility(View.GONE);
 		}
 	};
-	
+
 	OnFocusChangeListener onMoneyFieldFocusChange = new OnFocusChangeListener() {
-		
+
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
-			if(hasFocus == false) {
-				String text = ((EditText)v).getText().toString();
-				DecimalFormat df = new DecimalFormat("#.##");
-				((EditText)v).setText(df.format(Double.parseDouble(text)));
+			if (hasFocus == false) {
+				String text = ((EditText) v).getText().toString();
+				if (text != null) {
+					if (Double.parseDouble(text) < 0) {
+						text = "0.00";
+					}
+					DecimalFormat df = new DecimalFormat("#.##");
+					((EditText) v).setText(df.format(Double.parseDouble(text)));
+				}
 			}
-			
+
+		}
+	};
+
+	OnFocusChangeListener onEditModeMoneyFocusChange = new OnFocusChangeListener() {
+
+		@Override
+		public void onFocusChange(View v, boolean hasFocus) {
+			if (hasFocus == false) {
+				EditText currentView = (EditText)v;
+				
+				// TODO: edit here
+			}
+
 		}
 	};
 
@@ -239,7 +277,7 @@ public class ProductDetailPageActivity extends Activity implements
 		private final String PARAM_productdescription = "productdescription";
 		private final String PARAM_producttype = "producttype";
 		private final String PARAM_productimgsrc = "productimgsrc";
-		
+
 		private final String RESULT_success = "success";
 
 		@Override
@@ -249,44 +287,65 @@ public class ProductDetailPageActivity extends Activity implements
 			JSONObject jsonDataObject = null;
 
 			try {
-				
+
 				StringBuilder sb = new StringBuilder();
 				sb.append(ApplicationConstant.SERVICE_URL);
 				sb.append(ApplicationConstant.SERVICE_ADD_NEW_PRODUCT);
 				String url = sb.toString();
 
 				Log.v("url=", url);
-				
+
 				DecimalFormat df = new DecimalFormat("#.##");
-				
+
 				String merchantemail = gPlusClient.getAccountName();
 				String productname = productNameValue.getText().toString();
-				String productprice = df.format(Double.parseDouble(productPriceValue.getText().toString()));
-				String productimg = merchantemail + Calendar.getInstance().getTime().toString()+".png"; // product image name = email + time
+				String productprice = df.format(Double
+						.parseDouble(productPriceValue.getText().toString()));
+				String productimg = merchantemail
+						+ Calendar.getInstance().getTime().toString() + ".png"; // product
+																				// image
+																				// name
+																				// =
+																				// email
+																				// +
+																				// time
 				String productdiscount = "0";
-				String productshipping = df.format(Double.parseDouble(productShippingValue.getText().toString()));
+				String productshipping = df
+						.format(Double.parseDouble(productShippingValue
+								.getText().toString()));
 				String productavailable = "1"; // TODO: this is just mock value
-				String productdescription = productDescriptionValue.getText().toString();
+				String productdescription = productDescriptionValue.getText()
+						.toString();
 				String producttype = "0"; // TODO: this is just mock value
-				
+
 				Bitmap tempProductImgBitmap = productImgBitmap;
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-				tempProductImgBitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-				byte [] byteArray = stream.toByteArray();
+				tempProductImgBitmap.compress(Bitmap.CompressFormat.PNG, 90,
+						stream);
+				byte[] byteArray = stream.toByteArray();
 				String imageString = Base64.encodeBytes(byteArray);
-				
+
 				List<NameValuePair> entity = new ArrayList<NameValuePair>();
-				entity.add(new BasicNameValuePair(PARAM_merchantemail, merchantemail));
-				entity.add(new BasicNameValuePair(PARAM_productname, productname));
-				entity.add(new BasicNameValuePair(PARAM_productprice, productprice));
+				entity.add(new BasicNameValuePair(PARAM_merchantemail,
+						merchantemail));
+				entity.add(new BasicNameValuePair(PARAM_productname,
+						productname));
+				entity.add(new BasicNameValuePair(PARAM_productprice,
+						productprice));
 				entity.add(new BasicNameValuePair(PARAM_productimg, productimg));
-				entity.add(new BasicNameValuePair(PARAM_productdiscount, productdiscount));
-				entity.add(new BasicNameValuePair(PARAM_productshipping, productshipping));
-				entity.add(new BasicNameValuePair(PARAM_productavailable, productavailable));
-				entity.add(new BasicNameValuePair(PARAM_productdescription, productdescription));
-				entity.add(new BasicNameValuePair(PARAM_producttype, producttype));
-				entity.add(new BasicNameValuePair(PARAM_productimgsrc, imageString));
-				
+				entity.add(new BasicNameValuePair(PARAM_productdiscount,
+						productdiscount));
+				entity.add(new BasicNameValuePair(PARAM_productshipping,
+						productshipping));
+				entity.add(new BasicNameValuePair(PARAM_productavailable,
+						productavailable));
+				entity.add(new BasicNameValuePair(PARAM_productdescription,
+						productdescription));
+				entity.add(new BasicNameValuePair(PARAM_producttype,
+						producttype));
+				entity.add(new BasicNameValuePair(PARAM_productimgsrc,
+						imageString));
+
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(url);
 				httpPost.setEntity(new UrlEncodedFormEntity(entity));
@@ -318,16 +377,16 @@ public class ProductDetailPageActivity extends Activity implements
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			int success = -1;
 
 			try {
 				Log.v("result", jsonDataLine);
-				
+
 				jsonDataObject = new JSONObject(jsonDataLine);
 
 				success = jsonDataObject.getInt(RESULT_success);
-				
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -339,9 +398,9 @@ public class ProductDetailPageActivity extends Activity implements
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 			progressBar.setVisibility(View.GONE);
-			Log.v("addproduct", ""+result);
-			
-			if(result == 1) {
+			Log.v("addproduct", "" + result);
+
+			if (result == 1) {
 				finish();
 			} else {
 				// TODO: insert product is not success

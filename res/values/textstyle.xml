@@ -13,6 +13,8 @@
         <item name="android:textColor">@color/Black</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:shadowColor">@color/White</item>
+        <item name="android:shadowRadius">2</item>
     </style>
 
     <style name="mediumBlackText">
@@ -27,6 +29,8 @@
         <item name="android:textColor">@color/Black</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:shadowColor">@color/White</item>
+        <item name="android:shadowRadius">2</item>
     </style>
 
     <style name="smallBlackText">
@@ -41,6 +45,8 @@
         <item name="android:textColor">@color/Black</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:shadowColor">@color/White</item>
+        <item name="android:shadowRadius">2</item>
     </style>
 
     <style name="xSmallBlackText">
