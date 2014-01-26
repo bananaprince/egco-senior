@@ -27,8 +27,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="100"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="vertical" >
 
             <TableLayout
@@ -109,6 +109,7 @@
                 </TableRow>
 
                 <TableRow
+                    android:id="@+id/productdetailpage_product_discount_row"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp" >
@@ -132,11 +133,11 @@
                             style="@style/mediumBlackText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
                             android:layout_weight="1"
                             android:background="@color/White50"
                             android:inputType="numberDecimal"
-                            android:padding="5dp"
-                            android:layout_marginRight="5dp" />
+                            android:padding="5dp" />
 
                         <EditText
                             android:id="@+id/productdetailpage_product_discount_percentage"
@@ -202,6 +203,7 @@
                 </TableRow>
 
                 <TableRow
+                    android:id="@+id/productdetailpage_product_available_row"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp" >
@@ -233,17 +235,15 @@
             </TableLayout>
         </ScrollView>
 
+        <View
+            style="@style/divider" />
+
         <RelativeLayout
             android:id="@+id/productdetailpage_button_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1" >
-
-            <View
-                style="@style/divider"
-                android:layout_alignParentTop="true" />
+            android:layout_marginTop="5dp" >
 
             <Button
                 android:id="@+id/productdetailpage_submit_button"

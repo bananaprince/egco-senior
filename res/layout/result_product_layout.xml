@@ -13,7 +13,7 @@
     
     <TextView 
         android:id="@+id/product_discount"
-        style="@style/smallBlackText"
+        style="@style/smallBlackTextBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/product_image"
@@ -33,7 +33,7 @@
 
         <TextView
             android:id="@+id/product_price"
-            style="@style/smallBlackText"
+            style="@style/smallBlackTextBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="4dp"
@@ -42,7 +42,7 @@
 
         <TextView
             android:id="@+id/product_shipping"
-            style="@style/xSmallBlackText"
+            style="@style/xSmallBlackTextBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="2dp"

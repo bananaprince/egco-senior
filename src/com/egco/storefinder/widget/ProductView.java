@@ -3,11 +3,18 @@ package com.egco.storefinder.widget;
 import java.text.DecimalFormat;
 
 import com.egco.storefinderproject.R;
+import com.egco.storefinderproject.R.color;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
@@ -20,7 +27,7 @@ public class ProductView extends RelativeLayout {
 	private TextView productPrice;
 	private TextView productShipping;
 	private Context mContext;
-	private long productPopularity;
+	private DecimalFormat df;
 
 	public ProductView(Context context) {
 		super(context);
@@ -28,9 +35,9 @@ public class ProductView extends RelativeLayout {
 		
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.result_product_layout, this);
+		df = new DecimalFormat("#.##");
 		
 		loadViews();
-		productPopularity = 0;
 	}
 
 	public ProductView(Context context, AttributeSet attrs) {
@@ -39,9 +46,9 @@ public class ProductView extends RelativeLayout {
 
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.result_product_layout, this);
+		df = new DecimalFormat("#.##");
 
 		loadViews();
-		productPopularity = 0;
 	}
 	
 	private void init() {
@@ -58,10 +65,6 @@ public class ProductView extends RelativeLayout {
 		productShipping = (TextView) findViewById(R.id.product_shipping);
 	}
 	
-	public void setProductPropularity(long popularity) {
-		productPopularity = popularity;
-	}
-	
 	public void setProductImageByURL(String url) {
 		Picasso.with(mContext).load(url).into(productImage);
 	}
@@ -70,43 +73,34 @@ public class ProductView extends RelativeLayout {
 		Picasso.with(mContext).load(url).resize(width, height).into(productImage);
 	}
 	
-	public void setProductPriceAndDiscount(double price,double discount){
-		DecimalFormat df = new DecimalFormat("#.00");
-		StringBuilder discountSB = new StringBuilder();
-		StringBuilder priceSB = new StringBuilder();
-		
-		discountSB.append("-");
-		discountSB.append(Math.round(discount));
-		discountSB.append(" %");
-		this.setProductDiscountText(discountSB.toString());
-		
-		price *= (1-(discount/100));
-		priceSB.append(df.format(price));
-		priceSB.append(" B");
-		this.setProductPriceText(priceSB.toString());
+	public void setBiggerFont() {
+		productDiscount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+		productPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+		productShipping.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 	}
 	
-	private void setProductDiscountText(String text) {
-		productDiscount.setText(text);
+	public void setPriceAndDiscount(double price,double discount) {
+		if(Math.abs(price-discount) < 0.01f) {
+			// no discount
+			productDiscount.setVisibility(View.GONE);
+			productPrice.setText(df.format(price)+" B");
+		} else {
+			// some discount
+			long percentage = Math.round((1 - (discount/price))*100);
+			productDiscount.setText("-"+percentage+"%");
+			Spannable spanText = Spannable.Factory.getInstance().newSpannable(df.format(discount)+" ("+df.format(price)+") B");
+			spanText.setSpan(new ForegroundColorSpan(Color.RED), 0, df.format(discount).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			spanText.setSpan(new StrikethroughSpan(), df.format(discount).length()+2, spanText.length()-3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			productPrice.setText(spanText);
+		}
 	}
 	
-	private void setProductPriceText(String text) {
-		productPrice.setText(text);
+	public void setShipping(double shipping) {
+		if(Math.abs(shipping) < 0.01f) {
+			productShipping.setText("Free Shipping");
+			productShipping.setTextColor(Color.GREEN);
+		} else {
+			productShipping.setText("+"+df.format(shipping)+" B Shipping");
+		}
 	}
-	
-	private void setProductShippingText(String text) {
-		productShipping.setText(text);
-	}
-	
-	public void setProductShippingValue(double shipping) {
-		DecimalFormat df = new DecimalFormat("#.00");
-		StringBuilder sb = new StringBuilder();
-		sb.append("+ ");
-		sb.append(df.format(shipping));
-		sb.append(" B Shipping");
-		this.setProductShippingText(sb.toString());
-	}
-
-
-
 }

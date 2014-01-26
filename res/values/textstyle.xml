@@ -49,6 +49,15 @@
         <item name="android:shadowRadius">2</item>
     </style>
 
+    <style name="xSmallBlackTextBold">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/Black</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:shadowColor">@color/White</item>
+        <item name="android:shadowRadius">2</item>
+    </style>
+
     <style name="xSmallBlackText">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/Black</item>

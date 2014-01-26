@@ -10,6 +10,7 @@ public class ProductModel implements Serializable,Comparable<ProductModel>{
 	private int productID;
 	private String productImgURL;
 	private String ownerImgURL;
+	private String merchantEmail;
 	private double price;
 	private double discount;
 	private double shippingCost;
@@ -27,6 +28,13 @@ public class ProductModel implements Serializable,Comparable<ProductModel>{
 	}
 	public String getDescription() {
 		return description;
+	}
+	
+	public String getMerchantEmail() {
+		return merchantEmail;
+	}
+	public void setMerchantEmail(String merchantEmail) {
+		this.merchantEmail = merchantEmail;
 	}
 	public void setDescription(String description) {
 		this.description = description;

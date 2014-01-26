@@ -11,6 +11,7 @@ public class ApplicationConstant {
 	public static final String SERVICE_GET_USER_STATUS = "db_getuserstatus.php";
 	public static final String SERVICE_GET_ALL_PRODUCT_LIST = "db_getallproductlist.php";
 	public static final String SERVICE_ADD_NEW_PRODUCT = "productImageSrc/db_addproduct.php";
+	public static final String SERVICE_SEARCH = "db_search.php";
 
 	public static final String PAGE_PREVIOUS = "_previousPAGE_";
 
@@ -30,6 +31,7 @@ public class ApplicationConstant {
 	public static final String INTENT_ACTION = "_action__";
 	public static final String INTENT_CROPPED_IMAGE = "_croppedImage_";
 	public static final String INTENT_PRODUCT_MODEL = "_productModel_";
+	public static final String INTENT_QUERY = "_query_";
 	
 	public static final int REQUEST_CODE_PHOTO_PICKER = 100;
 }

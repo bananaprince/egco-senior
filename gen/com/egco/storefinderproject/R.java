@@ -26,6 +26,19 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int adSize=0x7f010005;
+        /** 
+    A comma-separated list of the supported ad sizes. The sizes must be one of
+    BANNER, FULL_BANNER, LEADERBOARD, MEDIUM_RECTANGLE, SMART_BANNER,
+    WIDE_SKYSCRAPER, or &lt;width&gt;x&lt;height&gt;.
+    
+         <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int adSizes=0x7f010006;
         /**  The ad unit ID. 
          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
@@ -34,7 +47,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int adUnitId=0x7f010006;
+        public static final int adUnitId=0x7f010007;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -58,7 +71,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraBearing=0x7f010008;
+        public static final int cameraBearing=0x7f010009;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -66,7 +79,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraTargetLat=0x7f010009;
+        public static final int cameraTargetLat=0x7f01000a;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -74,7 +87,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraTargetLng=0x7f01000a;
+        public static final int cameraTargetLng=0x7f01000b;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -82,7 +95,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraTilt=0x7f01000b;
+        public static final int cameraTilt=0x7f01000c;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -90,7 +103,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraZoom=0x7f01000c;
+        public static final int cameraZoom=0x7f01000d;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -98,7 +111,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int discount=0x7f010016;
+        public static final int discount=0x7f010017;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -136,7 +149,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 <tr><td><code>hybrid</code></td><td>4</td><td></td></tr>
 </table>
          */
-        public static final int mapType=0x7f010007;
+        public static final int mapType=0x7f010008;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -144,7 +157,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int price=0x7f010015;
+        public static final int price=0x7f010016;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -152,7 +165,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int shipping=0x7f010017;
+        public static final int shipping=0x7f010018;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -160,7 +173,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiCompass=0x7f01000d;
+        public static final int uiCompass=0x7f01000e;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -168,7 +181,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiRotateGestures=0x7f01000e;
+        public static final int uiRotateGestures=0x7f01000f;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -176,7 +189,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiScrollGestures=0x7f01000f;
+        public static final int uiScrollGestures=0x7f010010;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -184,7 +197,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiTiltGestures=0x7f010010;
+        public static final int uiTiltGestures=0x7f010011;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -192,7 +205,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiZoomControls=0x7f010011;
+        public static final int uiZoomControls=0x7f010012;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -200,7 +213,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiZoomGestures=0x7f010012;
+        public static final int uiZoomGestures=0x7f010013;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -208,7 +221,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int useViewLifecycle=0x7f010013;
+        public static final int useViewLifecycle=0x7f010014;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -216,7 +229,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int zOrderOnTop=0x7f010014;
+        public static final int zOrderOnTop=0x7f010015;
     }
     public static final class color {
         public static final int Black=0x7f060016;
@@ -330,10 +343,10 @@ containing a value of this type.
         public static final int banpage_message1=0x7f050008;
         public static final int banpage_message2=0x7f05000b;
         public static final int banpage_reason=0x7f050009;
-        public static final int cell_editbutton=0x7f050039;
-        public static final int cell_product_img=0x7f050036;
-        public static final int cell_product_name=0x7f050037;
-        public static final int cell_product_price=0x7f050038;
+        public static final int cell_editbutton=0x7f05003b;
+        public static final int cell_product_img=0x7f050038;
+        public static final int cell_product_name=0x7f050039;
+        public static final int cell_product_price=0x7f05003a;
         public static final int hybrid=0x7f050007;
         public static final int imagecropperpage_button_layout=0x7f050013;
         public static final int imagecropperpage_image=0x7f050012;
@@ -357,57 +370,59 @@ containing a value of this type.
         public static final int off=0x7f050002;
         public static final int on=0x7f050000;
         public static final int onTouch=0x7f050001;
-        public static final int product_discount=0x7f05003d;
-        public static final int product_image=0x7f05003c;
-        public static final int product_price=0x7f05003e;
-        public static final int product_shipping=0x7f05003f;
-        public static final int productdetailpage_button_layout=0x7f050034;
-        public static final int productdetailpage_product_available=0x7f050032;
-        public static final int productdetailpage_product_available_switch_value=0x7f050033;
-        public static final int productdetailpage_product_description=0x7f050030;
-        public static final int productdetailpage_product_description_value=0x7f050031;
-        public static final int productdetailpage_product_discount=0x7f05002b;
-        public static final int productdetailpage_product_discount_percentage=0x7f05002d;
-        public static final int productdetailpage_product_discount_value=0x7f05002c;
+        public static final int product_discount=0x7f05003f;
+        public static final int product_image=0x7f05003e;
+        public static final int product_price=0x7f050040;
+        public static final int product_shipping=0x7f050041;
+        public static final int productdetailpage_button_layout=0x7f050036;
+        public static final int productdetailpage_product_available=0x7f050034;
+        public static final int productdetailpage_product_available_row=0x7f050033;
+        public static final int productdetailpage_product_available_switch_value=0x7f050035;
+        public static final int productdetailpage_product_description=0x7f050031;
+        public static final int productdetailpage_product_description_value=0x7f050032;
+        public static final int productdetailpage_product_discount=0x7f05002c;
+        public static final int productdetailpage_product_discount_percentage=0x7f05002e;
+        public static final int productdetailpage_product_discount_row=0x7f05002b;
+        public static final int productdetailpage_product_discount_value=0x7f05002d;
         public static final int productdetailpage_product_image=0x7f050024;
         public static final int productdetailpage_product_name=0x7f050025;
         public static final int productdetailpage_product_name_value=0x7f050026;
         public static final int productdetailpage_product_price=0x7f050029;
         public static final int productdetailpage_product_price_value=0x7f05002a;
-        public static final int productdetailpage_product_shipping=0x7f05002e;
-        public static final int productdetailpage_product_shipping_value=0x7f05002f;
+        public static final int productdetailpage_product_shipping=0x7f05002f;
+        public static final int productdetailpage_product_shipping_value=0x7f050030;
         public static final int productdetailpage_product_type=0x7f050027;
         public static final int productdetailpage_product_type_spinner_value=0x7f050028;
         public static final int productdetailpage_progressbar=0x7f050023;
-        public static final int productdetailpage_submit_button=0x7f050035;
-        public static final int result_gridLayout=0x7f050040;
+        public static final int productdetailpage_submit_button=0x7f050037;
+        public static final int result_gridLayout=0x7f050042;
         public static final int satellite=0x7f050005;
-        public static final int storedetailpage_message1=0x7f050042;
-        public static final int storedetailpage_message2=0x7f050043;
-        public static final int storedetailpage_progressbar=0x7f050041;
-        public static final int storedetailpage_storecontract=0x7f050048;
-        public static final int storedetailpage_storecontract_value=0x7f050049;
-        public static final int storedetailpage_storedetail=0x7f050046;
-        public static final int storedetailpage_storedetail_value=0x7f050047;
-        public static final int storedetailpage_storemail=0x7f05004c;
-        public static final int storedetailpage_storemail_value=0x7f05004d;
-        public static final int storedetailpage_storename=0x7f050044;
-        public static final int storedetailpage_storename_value=0x7f050045;
-        public static final int storedetailpage_storepage_button=0x7f05004e;
-        public static final int storedetailpage_storetel=0x7f05004a;
-        public static final int storedetailpage_storetel_value=0x7f05004b;
-        public static final int storepage_additem=0x7f050051;
-        public static final int storepage_listview=0x7f050050;
-        public static final int storepage_mainpage_button=0x7f050052;
-        public static final int storepage_progressbar=0x7f05004f;
-        public static final int storepage_setting_button=0x7f050053;
+        public static final int storedetailpage_message1=0x7f050044;
+        public static final int storedetailpage_message2=0x7f050045;
+        public static final int storedetailpage_progressbar=0x7f050043;
+        public static final int storedetailpage_storecontract=0x7f05004a;
+        public static final int storedetailpage_storecontract_value=0x7f05004b;
+        public static final int storedetailpage_storedetail=0x7f050048;
+        public static final int storedetailpage_storedetail_value=0x7f050049;
+        public static final int storedetailpage_storemail=0x7f05004e;
+        public static final int storedetailpage_storemail_value=0x7f05004f;
+        public static final int storedetailpage_storename=0x7f050046;
+        public static final int storedetailpage_storename_value=0x7f050047;
+        public static final int storedetailpage_storepage_button=0x7f050050;
+        public static final int storedetailpage_storetel=0x7f05004c;
+        public static final int storedetailpage_storetel_value=0x7f05004d;
+        public static final int storepage_additem=0x7f050053;
+        public static final int storepage_listview=0x7f050052;
+        public static final int storepage_mainpage_button=0x7f050054;
+        public static final int storepage_progressbar=0x7f050051;
+        public static final int storepage_setting_button=0x7f050055;
         public static final int terrain=0x7f050006;
         public static final int textView1=0x7f050018;
         public static final int toast_image=0x7f05000f;
         public static final int toast_layout=0x7f05000e;
         public static final int toast_text=0x7f050010;
-        public static final int type_spinner_image=0x7f05003a;
-        public static final int type_spinner_text=0x7f05003b;
+        public static final int type_spinner_image=0x7f05003c;
+        public static final int type_spinner_text=0x7f05003d;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f090000;
@@ -619,7 +634,8 @@ containing a value of this type.
         public static final int mediumBlackTextBold=0x7f080006;
         public static final int smallBlackText=0x7f080007;
         public static final int smallBlackTextBold=0x7f080008;
-        public static final int xSmallBlackText=0x7f080009;
+        public static final int xSmallBlackText=0x7f08000a;
+        public static final int xSmallBlackTextBold=0x7f080009;
     }
     public static final class styleable {
         /** Attributes that can be used with a AdsAttrs.
@@ -630,13 +646,16 @@ containing a value of this type.
            <tr><th>Attribute</th><th>Description</th></tr>
            <tr><td><code>{@link #AdsAttrs_adSize com.egco.storefinderproject:adSize}</code></td><td>
     The size of the ad.</td></tr>
+           <tr><td><code>{@link #AdsAttrs_adSizes com.egco.storefinderproject:adSizes}</code></td><td>
+    A comma-separated list of the supported ad sizes.</td></tr>
            <tr><td><code>{@link #AdsAttrs_adUnitId com.egco.storefinderproject:adUnitId}</code></td><td> The ad unit ID.</td></tr>
            </table>
            @see #AdsAttrs_adSize
+           @see #AdsAttrs_adSizes
            @see #AdsAttrs_adUnitId
          */
         public static final int[] AdsAttrs = {
-            0x7f010005, 0x7f010006
+            0x7f010005, 0x7f010006, 0x7f010007
         };
         /**
           <p>
@@ -661,6 +680,26 @@ containing a value of this type.
         /**
           <p>
           @attr description
+          
+    A comma-separated list of the supported ad sizes. The sizes must be one of
+    BANNER, FULL_BANNER, LEADERBOARD, MEDIUM_RECTANGLE, SMART_BANNER,
+    WIDE_SKYSCRAPER, or &lt;width&gt;x&lt;height&gt;.
+    
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          <p>This is a private symbol.
+          @attr name com.egco.storefinderproject:adSizes
+        */
+        public static final int AdsAttrs_adSizes = 1;
+        /**
+          <p>
+          @attr description
            The ad unit ID. 
 
 
@@ -673,7 +712,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name com.egco.storefinderproject:adUnitId
         */
-        public static final int AdsAttrs_adUnitId = 1;
+        public static final int AdsAttrs_adUnitId = 2;
         /** Attributes that can be used with a CropImageView.
            <p>Includes the following attributes:</p>
            <table>
@@ -803,10 +842,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
            @see #MapAttrs_zOrderOnTop
          */
         public static final int[] MapAttrs = {
-            0x7f010007, 0x7f010008, 0x7f010009, 0x7f01000a,
-            0x7f01000b, 0x7f01000c, 0x7f01000d, 0x7f01000e,
-            0x7f01000f, 0x7f010010, 0x7f010011, 0x7f010012,
-            0x7f010013, 0x7f010014
+            0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b,
+            0x7f01000c, 0x7f01000d, 0x7f01000e, 0x7f01000f,
+            0x7f010010, 0x7f010011, 0x7f010012, 0x7f010013,
+            0x7f010014, 0x7f010015
         };
         /**
           <p>This symbol is the offset where the {@link com.egco.storefinderproject.R.attr#cameraBearing}
@@ -1025,7 +1064,7 @@ containing a value of this type.
            @see #ResultPageGridView_shipping
          */
         public static final int[] ResultPageGridView = {
-            0x7f010015, 0x7f010016, 0x7f010017
+            0x7f010016, 0x7f010017, 0x7f010018
         };
         /**
           <p>This symbol is the offset where the {@link com.egco.storefinderproject.R.attr#discount}

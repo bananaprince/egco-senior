@@ -9,8 +9,10 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -21,6 +23,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,6 +57,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.Toast;
 
 public class ProductDetailPageActivity extends Activity implements
@@ -64,6 +68,8 @@ public class ProductDetailPageActivity extends Activity implements
 
 	private Context mContext;
 	String action;
+	
+	private String[] shortStopWord = {"a","about","an","are","as","at","be","by","com","for","from","how","in","is","it","of","on","or","that","the","this","to","was","what","when","where","who","will","with","www"};
 
 	private ImageView productImg;
 	private EditText productNameValue;
@@ -74,6 +80,9 @@ public class ProductDetailPageActivity extends Activity implements
 	private Spinner productTypeSpinner;
 	private EditText productDiscountValue;
 	private EditText productDiscountPercentage;
+
+	private TableRow availableRow;
+	private TableRow discountRow;
 
 	private StoreDetailPageSpinnerAdapter spinnerAdapter;
 
@@ -115,26 +124,28 @@ public class ProductDetailPageActivity extends Activity implements
 		productImg.setOnClickListener(onAddProductImgClick);
 		productShippingValue.setOnFocusChangeListener(onMoneyFieldFocusChange);
 
+		availableRow = (TableRow) findViewById(R.id.productdetailpage_product_available_row);
+		discountRow = (TableRow) findViewById(R.id.productdetailpage_product_discount_row);
+
 		if (ApplicationConstant.ACTION_PRODUCT_DETAIL_ADD
 				.equalsIgnoreCase(action)) {
 			// add new item case
 			initAdd();
-			productPriceValue.setOnFocusChangeListener(onMoneyFieldFocusChange);
+
 		} else if (ApplicationConstant.ACTION_PRODUCT_DETAIL_EDIT
 				.equalsIgnoreCase(action)) {
 			// edit item case
 			initEdit();
-			productPriceValue.setOnFocusChangeListener(onEditModeMoneyFocusChange);
-			productDiscountValue
-					.setOnFocusChangeListener(onEditModeMoneyFocusChange);
-			productDiscountPercentage
-					.setOnFocusChangeListener(onEditModeMoneyFocusChange);
+
 		}
 	}
 
 	void initAdd() {
 		submitButton.setOnClickListener(onAddSubmitButtonClick);
+		productPriceValue.setOnFocusChangeListener(onMoneyFieldFocusChange);
 
+		availableRow.setVisibility(View.GONE);
+		discountRow.setVisibility(View.GONE);
 	}
 
 	void initEdit() {
@@ -147,6 +158,19 @@ public class ProductDetailPageActivity extends Activity implements
 		productPriceValue.setText("" + editItemModel.getPrice());
 		productDescriptionValue.setText(editItemModel.getDescription());
 		productShippingValue.setText("" + editItemModel.getShippingCost());
+
+		productDiscountValue.setText("" + editItemModel.getDiscount());
+		productDiscountPercentage.setText(""
+				+ Math.round((1 - (editItemModel.getDiscount() / editItemModel
+						.getPrice())) * 100));
+		productTypeSpinner.setSelection(editItemModel.getType());
+
+		productPriceValue.setOnFocusChangeListener(onEditModeMoneyFocusChange);
+		productDiscountValue
+				.setOnFocusChangeListener(onEditModeMoneyFocusChange);
+		productDiscountPercentage
+				.setOnFocusChangeListener(onEditModeMoneyFocusChange);
+
 	}
 
 	@Override
@@ -208,9 +232,40 @@ public class ProductDetailPageActivity extends Activity implements
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
 			if (hasFocus == false) {
-				EditText currentView = (EditText)v;
-				
-				// TODO: edit here
+				EditText currentView = (EditText) v;
+
+				double priceValue = Double.parseDouble(productPriceValue
+						.getText().toString());
+				double discountValue = Double.parseDouble(productDiscountValue
+						.getText().toString());
+				double discountPercentage = Double
+						.parseDouble(productDiscountPercentage.getText()
+								.toString());
+				DecimalFormat df = new DecimalFormat("#.##");
+				if (currentView.equals(productPriceValue)) {
+					// product price change
+					discountValue = priceValue;
+					discountPercentage = 0f;
+
+					productDiscountValue.setText(df.format(discountValue));
+					productDiscountPercentage.setText(Long.toString(Math
+							.round(discountPercentage)));
+
+				} else if (currentView.equals(productDiscountValue)) {
+					// product discount change
+					discountPercentage = (1 - (discountValue / priceValue)) * 100;
+
+					productDiscountPercentage.setText(Long.toString(Math
+							.round(discountPercentage)));
+
+				} else if (currentView.equals(productDiscountPercentage)) {
+					// product discount percentage
+					discountValue = priceValue
+							* ((100 - discountPercentage) / 100);
+
+					productDiscountValue.setText(df.format(discountValue));
+				}
+
 			}
 
 		}
@@ -261,7 +316,6 @@ public class ProductDetailPageActivity extends Activity implements
 
 	@Override
 	public void onDisconnected() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -277,6 +331,8 @@ public class ProductDetailPageActivity extends Activity implements
 		private final String PARAM_productdescription = "productdescription";
 		private final String PARAM_producttype = "producttype";
 		private final String PARAM_productimgsrc = "productimgsrc";
+		private final String PARAM_producthash = "producthash";
+		private final String PARAM_productword = "productword";
 
 		private final String RESULT_success = "success";
 
@@ -309,14 +365,16 @@ public class ProductDetailPageActivity extends Activity implements
 																				// email
 																				// +
 																				// time
-				String productdiscount = "0";
+				String productdiscount = df.format(Double
+						.parseDouble(productPriceValue.getText().toString()));
 				String productshipping = df
 						.format(Double.parseDouble(productShippingValue
 								.getText().toString()));
-				String productavailable = "1"; // TODO: this is just mock value
+				String productavailable = "1"; // fix value for new product
 				String productdescription = productDescriptionValue.getText()
 						.toString();
-				String producttype = "0"; // TODO: this is just mock value
+				String producttype = Integer.toString(productTypeSpinner
+						.getSelectedItemPosition());
 
 				Bitmap tempProductImgBitmap = productImgBitmap;
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -345,6 +403,8 @@ public class ProductDetailPageActivity extends Activity implements
 						producttype));
 				entity.add(new BasicNameValuePair(PARAM_productimgsrc,
 						imageString));
+				entity.add(new BasicNameValuePair(PARAM_producthash, getHashTagList(productdescription).toString()));
+				entity.add(new BasicNameValuePair(PARAM_productword, getWordList(productdescription).toString() ));
 
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(url);
@@ -408,5 +468,47 @@ public class ProductDetailPageActivity extends Activity implements
 		}
 
 	}
+
+	private JSONArray getHashTagList(String s) {
+		ArrayList<String> hashList = new ArrayList<String>();
+		HashSet<String> set = new HashSet<String>();
+
+		String[] arr = s.split(" ");
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i].charAt(0) == '#') {
+				arr[i] = arr[i].replaceAll("[_-]", "").toLowerCase();
+				set.add(arr[i]);
+			}
+		}
+		hashList.addAll(set);
+		
+		JSONArray jArr = new JSONArray();
+		for(int i=0;i<hashList.size();i++) {
+			jArr.put(hashList.get(i));
+		}
+		return jArr;
+	}
+	
+	private JSONArray getWordList(String s) {
+		ArrayList<String> wordList = new ArrayList<String>();
+		HashSet<String> set = new HashSet<String>();
+		
+		s = s.replaceAll("[!@#$%^&*()-_+={}/?><]", "").toLowerCase();
+		String []arr = s.split(" ");
+		for(int i = 0;i<arr.length;i++) {
+			int index = Arrays.binarySearch(shortStopWord, arr[i]);
+			if(index < 0 || index >= shortStopWord.length) {
+				set.add(arr[i]);
+			}
+		}
+		wordList.addAll(set);
+		JSONArray jArr = new JSONArray();
+		for(int i=0;i<wordList.size();i++) {
+			jArr.put(wordList.get(i));
+		}
+		return jArr;
+	}
+	
+
 
 }
