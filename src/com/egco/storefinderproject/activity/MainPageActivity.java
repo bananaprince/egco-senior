@@ -29,6 +29,7 @@ import android.content.IntentSender.SendIntentException;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -64,11 +65,15 @@ public class MainPageActivity extends FragmentActivity implements
 	private ActionBar actionBar;
 	private PlusClient gPlusClient;
 	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
-	private Context mContext = this;
+	private Context mContext;
 	private EditText queryEditText;
 	private EditText queryTextHighlight;
 	private ImageView querySubmit;
 	private Button storeButton;
+	
+	private Fragment mainFragment;
+	private Fragment historyFragment;
+	private Fragment favoriteFragment;
 
 	private TelephonyManager telMng;
 
@@ -80,6 +85,8 @@ public class MainPageActivity extends FragmentActivity implements
 
 		setContentView(R.layout.mainpage);
 		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+		
+		mContext = this;
 
 		gPlusClient = new PlusClient.Builder(this, this, this).build();
 
@@ -104,6 +111,10 @@ public class MainPageActivity extends FragmentActivity implements
 		actionBar.setDisplayShowTitleEnabled(false);
 
 		viewPager.setCurrentItem(1);
+		
+		historyFragment = viewPagerAdapter.getItem(0);
+		mainFragment = viewPagerAdapter.getItem(1);
+		favoriteFragment = viewPagerAdapter.getItem(2);
 
 	}
 
@@ -124,7 +135,6 @@ public class MainPageActivity extends FragmentActivity implements
 		@Override
 		public void onTabReselected(Tab arg0,
 				android.app.FragmentTransaction arg1) {
-			// TODO Auto-generated method stub
 
 		}
 
@@ -137,7 +147,6 @@ public class MainPageActivity extends FragmentActivity implements
 		@Override
 		public void onTabUnselected(Tab arg0,
 				android.app.FragmentTransaction arg1) {
-			// TODO Auto-generated method stub
 
 		}
 	};
@@ -152,13 +161,11 @@ public class MainPageActivity extends FragmentActivity implements
 
 		@Override
 		public void onPageScrolled(int arg0, float arg1, int arg2) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void onPageScrollStateChanged(int arg0) {
-			// TODO Auto-generated method stub
 
 		}
 	};
@@ -184,13 +191,12 @@ public class MainPageActivity extends FragmentActivity implements
 
 	@Override
 	public void onDisconnected() {
-		// TODO Auto-generated method stub
 
 	}
 
 	private void initMainFragmentLayout() {
 
-		progressBar = (ProgressBar) findViewById(R.id.mainpage_progressbar);
+		progressBar = (ProgressBar) mainFragment.getView().findViewById(R.id.mainpage_progressbar);
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
 
@@ -199,18 +205,18 @@ public class MainPageActivity extends FragmentActivity implements
 		String imgURL = gPlusClient.getCurrentPerson().getImage().getUrl();
 		imgURL = imgURL.replace("?sz=50", "?sz=175");
 		Picasso.with(this).load(imgURL)
-				.into((ImageView) findViewById(R.id.mainpage_user_img));
-		((TextView) findViewById(R.id.mainpage_username)).setText(gPlusClient
+				.into((ImageView) mainFragment.getView().findViewById(R.id.mainpage_user_img));
+		((TextView) mainFragment.getView().findViewById(R.id.mainpage_username)).setText(gPlusClient
 				.getCurrentPerson().getDisplayName());
 
-		queryEditText = (EditText) findViewById(R.id.mainpage_search_query);
-		queryTextHighlight = (EditText) findViewById(R.id.mainpage_search_query_highlight);
+		queryEditText = (EditText) mainFragment.getView().findViewById(R.id.mainpage_search_query);
+		queryTextHighlight = (EditText) mainFragment.getView().findViewById(R.id.mainpage_search_query_highlight);
 		queryEditText.addTextChangedListener(queryWatcher);
 
-		querySubmit = (ImageView) findViewById(R.id.mainpage_search_submit_query_img);
+		querySubmit = (ImageView) mainFragment.getView().findViewById(R.id.mainpage_search_submit_query_img);
 		querySubmit.setOnClickListener(onSubmitQuery);
 
-		storeButton = (Button) findViewById(R.id.mainpage_storepage_button);
+		storeButton = (Button) mainFragment.getView().findViewById(R.id.mainpage_storepage_button);
 		storeButton.setOnClickListener(onStoreButtonClick);
 
 		progressBar.setVisibility(View.GONE);
@@ -231,9 +237,9 @@ public class MainPageActivity extends FragmentActivity implements
 
 		@Override
 		public void onClick(View v) {
-			// TODO: send data to result page
-			Toast.makeText(mContext, "go to result page", Toast.LENGTH_SHORT)
-					.show();
+			Intent intent = new Intent(mContext, ResultPageActivity.class);
+			intent.putExtra(ApplicationConstant.INTENT_QUERY, queryEditText.getText().toString());
+			startActivity(intent);
 
 		}
 	};

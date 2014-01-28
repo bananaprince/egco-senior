@@ -15,10 +15,23 @@
     <com.edmodo.cropper.CropImageView
         xmlns:custom="http://schemas.android.com/apk/res-auto"
         android:id="@+id/imagecropperpage_image"
+        android:layout_width="256dp"
+        android:layout_height="256dp"
+        android:layout_centerInParent="true"
+        android:background="@color/White50"
+        app:imageResource="@drawable/add_image_512" />
+    
+    <TextView 
+        android:id="@+id/imagecropperpage_instruction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:imageResource="@drawable/add_image_512" />
+        android:layout_centerHorizontal="true"
+        style="@style/mediumBlackTextBold"
+        android:textColor="@color/White"
+        android:layout_below="@+id/imagecropperpage_image"
+        android:layout_marginTop="10dp"
+        android:text="@string/imagecropperpage_instruction"
+        android:background="@drawable/rounded_corner_bg50"/>
 
     <View
         style="@style/divider"

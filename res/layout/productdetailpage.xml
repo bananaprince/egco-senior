@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/Blue_Main" >
 
     <ProgressBar
         android:id="@+id/productdetailpage_progressbar"
@@ -12,18 +13,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/Blue_Main"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/productdetailpage_divider"
+        android:layout_margin="5dp"
         android:orientation="vertical" >
-
-        <ImageView
-            android:id="@+id/productdetailpage_product_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:src="@drawable/add_image_256" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -35,6 +28,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp" >
+
+                <ImageView
+                    android:id="@+id/productdetailpage_product_image"
+                    android:layout_width="256dp"
+                    android:layout_height="256dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
+                    android:background="@color/White50"
+                    android:padding="5dp" />
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -234,31 +236,38 @@
                 </TableRow>
             </TableLayout>
         </ScrollView>
-
-        <View
-            style="@style/divider" />
-
-        <RelativeLayout
-            android:id="@+id/productdetailpage_button_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp" >
-
-            <Button
-                android:id="@+id/productdetailpage_submit_button"
-                style="@style/smallBlackTextBold"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/circle_button_bg_white50"
-                android:drawableTop="@drawable/save_as_50"
-                android:padding="5dp"
-                android:text="@string/productdetailpage_submit_additem" />
-        </RelativeLayout>
     </LinearLayout>
+
+    <View
+        android:id="@+id/productdetailpage_divider"
+        style="@style/divider"
+        android:layout_above="@+id/productdetailpage_submit_button" />
+
+    <Button
+        android:id="@+id/productdetailpage_submit_button"
+        style="@style/smallBlackTextBold"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/circle_button_bg_white50"
+        android:drawableTop="@drawable/save_as_50"
+        android:padding="5dp"
+        android:text="@string/productdetailpage_submit_additem" />
+
+    <Button
+        android:id="@+id/productdetailpage_delete_button"
+        style="@style/smallBlackTextBold"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@+id/productdetailpage_submit_button"
+        android:background="@drawable/circle_button_bg_white50"
+        android:drawableTop="@drawable/trash_50"
+        android:padding="5dp"
+        android:text="@string/productdetailpage_delete" />
 
 </RelativeLayout>

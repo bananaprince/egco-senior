@@ -45,6 +45,7 @@ import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.Toast;
 
@@ -68,8 +70,11 @@ public class ProductDetailPageActivity extends Activity implements
 
 	private Context mContext;
 	String action;
-	
-	private String[] shortStopWord = {"a","about","an","are","as","at","be","by","com","for","from","how","in","is","it","of","on","or","that","the","this","to","was","what","when","where","who","will","with","www"};
+
+	private String[] shortStopWord = { "a", "about", "an", "are", "as", "at",
+			"be", "by", "com", "for", "from", "how", "in", "is", "it", "of",
+			"on", "or", "that", "the", "this", "to", "was", "what", "when",
+			"where", "who", "will", "with", "www" };
 
 	private ImageView productImg;
 	private EditText productNameValue;
@@ -77,9 +82,11 @@ public class ProductDetailPageActivity extends Activity implements
 	private EditText productDescriptionValue;
 	private EditText productShippingValue;
 	private Button submitButton;
+	private Button deleteButton;
 	private Spinner productTypeSpinner;
 	private EditText productDiscountValue;
 	private EditText productDiscountPercentage;
+	private Switch productAvailableValue;
 
 	private TableRow availableRow;
 	private TableRow discountRow;
@@ -114,14 +121,15 @@ public class ProductDetailPageActivity extends Activity implements
 		productDescriptionValue = (EditText) findViewById(R.id.productdetailpage_product_description_value);
 		productShippingValue = (EditText) findViewById(R.id.productdetailpage_product_shipping_value);
 		submitButton = (Button) findViewById(R.id.productdetailpage_submit_button);
+		deleteButton = (Button) findViewById(R.id.productdetailpage_delete_button);
 		productTypeSpinner = (Spinner) findViewById(R.id.productdetailpage_product_type_spinner_value);
 		productDiscountValue = (EditText) findViewById(R.id.productdetailpage_product_discount_value);
 		productDiscountPercentage = (EditText) findViewById(R.id.productdetailpage_product_discount_percentage);
+		productAvailableValue = (Switch) findViewById(R.id.productdetailpage_product_available_switch_value);
 
 		spinnerAdapter = new StoreDetailPageSpinnerAdapter(mContext);
 		productTypeSpinner.setAdapter(spinnerAdapter);
 
-		productImg.setOnClickListener(onAddProductImgClick);
 		productShippingValue.setOnFocusChangeListener(onMoneyFieldFocusChange);
 
 		availableRow = (TableRow) findViewById(R.id.productdetailpage_product_available_row);
@@ -141,7 +149,9 @@ public class ProductDetailPageActivity extends Activity implements
 	}
 
 	void initAdd() {
+		productImg.setOnClickListener(onAddProductImgClick);
 		submitButton.setOnClickListener(onAddSubmitButtonClick);
+		deleteButton.setVisibility(View.GONE);
 		productPriceValue.setOnFocusChangeListener(onMoneyFieldFocusChange);
 
 		availableRow.setVisibility(View.GONE);
@@ -149,26 +159,34 @@ public class ProductDetailPageActivity extends Activity implements
 	}
 
 	void initEdit() {
+		submitButton.setOnClickListener(onEditSubmitButtonClick);
+		deleteButton.setOnClickListener(onEditDeleteButtonClick);
 		editItemModel = (ProductModel) getIntent().getSerializableExtra(
 				ApplicationConstant.INTENT_PRODUCT_MODEL);
 
 		Picasso.with(mContext).load(editItemModel.getProductImgURLFullPath())
-				.placeholder(R.drawable.add_image_512).into(productImg);
+				.placeholder(R.drawable.add_image_512).resize(300, 300)
+				.into(productImg);
 		productNameValue.setText(editItemModel.getProductName());
-		productPriceValue.setText("" + editItemModel.getPrice());
+		productNameValue.setBackground(null);
 		productDescriptionValue.setText(editItemModel.getDescription());
+		productDescriptionValue.setBackground(null);
+		productPriceValue.setText("" + editItemModel.getPrice());
 		productShippingValue.setText("" + editItemModel.getShippingCost());
+		productAvailableValue.setChecked(editItemModel.isAvailable());
 
 		productDiscountValue.setText("" + editItemModel.getDiscount());
 		productDiscountPercentage.setText(""
 				+ Math.round((1 - (editItemModel.getDiscount() / editItemModel
 						.getPrice())) * 100));
+		productDiscountPercentage.setBackground(null);
 		productTypeSpinner.setSelection(editItemModel.getType());
 
+		productNameValue.setKeyListener(null);
+		productDescriptionValue.setKeyListener(null);
+		productDiscountPercentage.setKeyListener(null);
 		productPriceValue.setOnFocusChangeListener(onEditModeMoneyFocusChange);
 		productDiscountValue
-				.setOnFocusChangeListener(onEditModeMoneyFocusChange);
-		productDiscountPercentage
 				.setOnFocusChangeListener(onEditModeMoneyFocusChange);
 
 	}
@@ -257,13 +275,6 @@ public class ProductDetailPageActivity extends Activity implements
 
 					productDiscountPercentage.setText(Long.toString(Math
 							.round(discountPercentage)));
-
-				} else if (currentView.equals(productDiscountPercentage)) {
-					// product discount percentage
-					discountValue = priceValue
-							* ((100 - discountPercentage) / 100);
-
-					productDiscountValue.setText(df.format(discountValue));
 				}
 
 			}
@@ -279,6 +290,28 @@ public class ProductDetailPageActivity extends Activity implements
 			progressBar.bringToFront();
 
 			new addNewProductAsyncTask().execute();
+		}
+	};
+
+	OnClickListener onEditSubmitButtonClick = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			progressBar.setVisibility(View.VISIBLE);
+			progressBar.bringToFront();
+
+			new productEditAsyncTask().execute();
+		}
+	};
+	
+	OnClickListener onEditDeleteButtonClick = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			progressBar.setVisibility(View.VISIBLE);
+			progressBar.bringToFront();
+			
+			new productDeleteAsyncTask().execute();
 		}
 	};
 
@@ -316,6 +349,221 @@ public class ProductDetailPageActivity extends Activity implements
 
 	@Override
 	public void onDisconnected() {
+
+	}
+
+	class productDeleteAsyncTask extends AsyncTask<String, String, Integer> {
+
+		private final String RESULT_success = "success";
+		private final String PARAM_merchantemail = "merchantemail";
+		private final String PARAM_pid = "pid";
+
+		@Override
+		protected Integer doInBackground(String... params) {
+
+			InputStream inputStream = null;
+			String jsonDataLine = null;
+			JSONObject jsonDataObject = null;
+
+			try {
+
+				StringBuilder sb = new StringBuilder();
+				sb.append(ApplicationConstant.SERVICE_URL);
+				sb.append(ApplicationConstant.SERVICE_DELETE_PRODUCT);
+				String url = sb.toString();
+
+				Log.v("url=", url);
+
+				String merchantemail = gPlusClient.getAccountName();
+				String pid = Integer.toString(editItemModel.getProductID());
+
+				List<NameValuePair> entity = new ArrayList<NameValuePair>();
+				entity.add(new BasicNameValuePair(PARAM_merchantemail,
+						merchantemail));
+				entity.add(new BasicNameValuePair(PARAM_pid, pid));
+
+				DefaultHttpClient httpClient = new DefaultHttpClient();
+				HttpPost httpPost = new HttpPost(url);
+				httpPost.setEntity(new UrlEncodedFormEntity(entity));
+
+				HttpResponse httpResponse = httpClient.execute(httpPost);
+				HttpEntity httpEntity = httpResponse.getEntity();
+
+				inputStream = httpEntity.getContent();
+
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				BufferedReader bufferedReader = new BufferedReader(
+						new InputStreamReader(inputStream, "iso-8859-1"), 8);
+				StringBuilder sb = new StringBuilder();
+				String line = null;
+
+				while ((line = bufferedReader.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				inputStream.close();
+				jsonDataLine = sb.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			int success = -1;
+
+			try {
+				Log.v("result", jsonDataLine);
+
+				jsonDataObject = new JSONObject(jsonDataLine);
+
+				success = jsonDataObject.getInt(RESULT_success);
+
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			return success;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			super.onPostExecute(result);
+			if(result == 1) {
+				progressBar.setVisibility(View.GONE);
+				finish();
+			} else {
+				progressBar.setVisibility(View.GONE);
+				
+			}
+		}
+
+	}
+
+	class productEditAsyncTask extends AsyncTask<String, String, Integer> {
+
+		private final String RESULT_success = "success";
+		
+		private final String PARAM_merchantemail = "merchantemail";
+		private final String PARAM_productprice = "productprice";
+		private final String PARAM_productdiscount = "productdiscount";
+		private final String PARAM_productshipping = "productshipping";
+		private final String PARAM_productavailable = "productavailable";
+		private final String PARAM_producttype = "producttype";
+		
+		private final String PARAM_pid = "pid";
+
+		@Override
+		protected Integer doInBackground(String... params) {
+
+			InputStream inputStream = null;
+			String jsonDataLine = null;
+			JSONObject jsonDataObject = null;
+			DecimalFormat df = new DecimalFormat("#.##");
+
+			try {
+
+				StringBuilder sb = new StringBuilder();
+				sb.append(ApplicationConstant.SERVICE_URL);
+				sb.append(ApplicationConstant.SERVICE_EDIT_PRODUCT);
+				String url = sb.toString();
+
+				Log.v("url=", url);
+
+				String merchantemail = gPlusClient.getAccountName();
+				String pid = Integer.toString(editItemModel.getProductID());
+				String productprice = df.format(Double
+						.parseDouble(productPriceValue.getText().toString()));
+				String productshipping = df
+						.format(Double.parseDouble(productShippingValue
+								.getText().toString()));
+				String producttype = Integer.toString(productTypeSpinner
+						.getSelectedItemPosition());
+				String productdiscount = df.format(Double
+						.parseDouble(productDiscountValue.getText().toString()));
+				String productavailable = productAvailableValue.isChecked() ? "1"
+						: "0";
+
+				List<NameValuePair> entity = new ArrayList<NameValuePair>();
+				entity.add(new BasicNameValuePair(PARAM_merchantemail,
+						merchantemail));
+				entity.add(new BasicNameValuePair(PARAM_pid,
+						pid));
+				entity.add(new BasicNameValuePair(PARAM_productprice,
+						productprice));
+				entity.add(new BasicNameValuePair(PARAM_productdiscount,
+						productdiscount));
+				entity.add(new BasicNameValuePair(PARAM_productshipping,
+						productshipping));
+				entity.add(new BasicNameValuePair(PARAM_productavailable,
+						productavailable));
+				entity.add(new BasicNameValuePair(PARAM_producttype,
+						producttype));
+
+				DefaultHttpClient httpClient = new DefaultHttpClient();
+				HttpPost httpPost = new HttpPost(url);
+				httpPost.setEntity(new UrlEncodedFormEntity(entity));
+
+				HttpResponse httpResponse = httpClient.execute(httpPost);
+				HttpEntity httpEntity = httpResponse.getEntity();
+
+				inputStream = httpEntity.getContent();
+
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				BufferedReader bufferedReader = new BufferedReader(
+						new InputStreamReader(inputStream, "iso-8859-1"), 8);
+				StringBuilder sb = new StringBuilder();
+				String line = null;
+
+				while ((line = bufferedReader.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				inputStream.close();
+				jsonDataLine = sb.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			int success = -1;
+
+			try {
+				Log.v("result", jsonDataLine);
+
+				jsonDataObject = new JSONObject(jsonDataLine);
+
+				success = jsonDataObject.getInt(RESULT_success);
+
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			return success;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			super.onPostExecute(result);
+			if (result == 1) {
+				progressBar.setVisibility(View.GONE);
+				finish();
+			} else {
+				progressBar.setVisibility(View.GONE);
+
+			}
+
+		}
 
 	}
 
@@ -365,18 +613,24 @@ public class ProductDetailPageActivity extends Activity implements
 																				// email
 																				// +
 																				// time
-				String productdiscount = df.format(Double
-						.parseDouble(productPriceValue.getText().toString()));
 				String productshipping = df
 						.format(Double.parseDouble(productShippingValue
 								.getText().toString()));
-				String productavailable = "1"; // fix value for new product
 				String productdescription = productDescriptionValue.getText()
 						.toString();
 				String producttype = Integer.toString(productTypeSpinner
 						.getSelectedItemPosition());
 
+				String productdiscount = df
+						.format(Double.parseDouble(productPriceValue
+								.getText().toString()));
+				String productavailable = "1";
+
 				Bitmap tempProductImgBitmap = productImgBitmap;
+				if (tempProductImgBitmap == null) {
+					tempProductImgBitmap = ((BitmapDrawable) productImg
+							.getDrawable()).getBitmap();
+				}
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				tempProductImgBitmap.compress(Bitmap.CompressFormat.PNG, 90,
 						stream);
@@ -403,8 +657,10 @@ public class ProductDetailPageActivity extends Activity implements
 						producttype));
 				entity.add(new BasicNameValuePair(PARAM_productimgsrc,
 						imageString));
-				entity.add(new BasicNameValuePair(PARAM_producthash, getHashTagList(productdescription).toString()));
-				entity.add(new BasicNameValuePair(PARAM_productword, getWordList(productdescription).toString() ));
+				entity.add(new BasicNameValuePair(PARAM_producthash,
+						getHashTagList(productdescription).toString()));
+				entity.add(new BasicNameValuePair(PARAM_productword,
+						getWordList(productdescription).toString()));
 
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(url);
@@ -481,34 +737,32 @@ public class ProductDetailPageActivity extends Activity implements
 			}
 		}
 		hashList.addAll(set);
-		
+
 		JSONArray jArr = new JSONArray();
-		for(int i=0;i<hashList.size();i++) {
+		for (int i = 0; i < hashList.size(); i++) {
 			jArr.put(hashList.get(i));
 		}
 		return jArr;
 	}
-	
+
 	private JSONArray getWordList(String s) {
 		ArrayList<String> wordList = new ArrayList<String>();
 		HashSet<String> set = new HashSet<String>();
-		
+
 		s = s.replaceAll("[!@#$%^&*()-_+={}/?><]", "").toLowerCase();
-		String []arr = s.split(" ");
-		for(int i = 0;i<arr.length;i++) {
+		String[] arr = s.split(" ");
+		for (int i = 0; i < arr.length; i++) {
 			int index = Arrays.binarySearch(shortStopWord, arr[i]);
-			if(index < 0 || index >= shortStopWord.length) {
+			if (index < 0 || index >= shortStopWord.length) {
 				set.add(arr[i]);
 			}
 		}
 		wordList.addAll(set);
 		JSONArray jArr = new JSONArray();
-		for(int i=0;i<wordList.size();i++) {
+		for (int i = 0; i < wordList.size(); i++) {
 			jArr.put(wordList.get(i));
 		}
 		return jArr;
 	}
-	
-
 
 }

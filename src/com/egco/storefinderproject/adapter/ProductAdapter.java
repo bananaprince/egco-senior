@@ -6,8 +6,12 @@ import java.util.Random;
 
 import com.egco.storefinder.model.ProductModel;
 import com.egco.storefinder.widget.ProductView;
+import com.egco.storefinderproject.activity.ResultPageDetailActivity;
+import com.egco.storefinderproject.constant.ApplicationConstant;
 
 import android.content.Context;
+import android.content.Intent;
+import android.sax.StartElementListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -103,7 +107,9 @@ public class ProductAdapter extends BaseAdapter {
 		
 		@Override
 		public void onClick(View v) {
-			Toast.makeText(mContext, v.getId() + ": score=" + getProductModelFromID(v.getId()).getPopularity(), Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(mContext, ResultPageDetailActivity.class);
+			intent.putExtra(ApplicationConstant.INTENT_PRODUCT_MODEL, getProductModelFromID(v.getId()));
+			mContext.startActivity(intent);
 
 		}
 	};

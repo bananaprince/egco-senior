@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class ImageCropperPageActivity extends Activity {
 
@@ -27,7 +28,7 @@ public class ImageCropperPageActivity extends Activity {
 	private CropImageView cropImageView;
 	private Button submitButton;
 	private ProgressBar progressBar;
-	private boolean somebool = false;
+	private TextView instruction;
 
 	private final int minimumImageSize = 256;
 
@@ -42,19 +43,26 @@ public class ImageCropperPageActivity extends Activity {
 
 		cropImageView = (CropImageView) findViewById(R.id.imagecropperpage_image);
 		submitButton = (Button) findViewById(R.id.imagecropperpage_submit_button);
+		instruction = (TextView) findViewById(R.id.imagecropperpage_instruction);
 
 		progressBar = (ProgressBar) findViewById(R.id.imagecropperpage_progressbar);
 		progressBar.setVisibility(View.GONE);
-
+		
 		cropImageView.setFixedAspectRatio(true);
 		cropImageView.setAspectRatio(1, 1);
 		cropImageView.setGuidelines(2);
-
-		Log.v("imagecropper", "oncreate"+somebool);
 		
-		photoPicker();
-		somebool = true;
+		instruction.setOnClickListener(onCropImageViewClick);
 	}
+	
+	OnClickListener onCropImageViewClick = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			photoPicker();
+			
+		}
+	};
 
 	private void photoPicker() {
 		// Intent to get image resource
@@ -72,6 +80,9 @@ public class ImageCropperPageActivity extends Activity {
 		if (requestCode == ApplicationConstant.REQUEST_CODE_PHOTO_PICKER) {
 
 			if (resultCode == RESULT_OK) {
+				
+				instruction.setOnClickListener(null);
+				instruction.setText(R.string.imagecropperpage_instruction2);
 
 				progressBar.setVisibility(View.VISIBLE);
 				progressBar.bringToFront();

@@ -12,6 +12,15 @@ public class ApplicationConstant {
 	public static final String SERVICE_GET_ALL_PRODUCT_LIST = "db_getallproductlist.php";
 	public static final String SERVICE_ADD_NEW_PRODUCT = "productImageSrc/db_addproduct.php";
 	public static final String SERVICE_SEARCH = "db_search.php";
+	public static final String SERVICE_EDIT_PRODUCT = "db_editproduct.php";
+	public static final String SERVICE_DELETE_PRODUCT = "db_deleteproduct.php";
+	public static final String SERVICE_ADD_FAVORITE = "db_addfavorite.php";
+	public static final String SERVICE_DELETE_FAVORITE = "db_deletefavorite.php";
+	public static final String SERVICE_GET_FAVORITE_LIST = "db_getfavoritelist.php";
+	public static final String SERVICE_GET_FAVORITE_STATUS = "db_getfavoritestatus.php";
+	public static final String SERVICE_REPORT = "db_addreport.php";
+	public static final String SERVICE_ADD_TRANSACTION = "db_addtransaction.php";
+	public static final String SERVICE_GET_TRANSACTION = "db_gettransactionlist.php";
 
 	public static final String PAGE_PREVIOUS = "_previousPAGE_";
 

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Red_Main" >
+
+    <ProgressBar
+        android:id="@+id/resultdetailpage_progressbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="5dp" >
+
+        <ImageView
+            android:id="@+id/resultdetailpage_productimage"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="256dp"
+            android:layout_height="256dp" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" >
+
+                <TextView
+                    style="@style/mediumBlackTextBold"
+                    android:background="@drawable/rounded_corner_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/resultdetailpage_productname" />
+
+                <TextView
+                    style="@style/mediumBlackTextBold"
+                    android:background="@drawable/rounded_corner_bg50"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/resultdetailpage_productname" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" >
+
+                <TextView
+                    style="@style/mediumBlackTextBold"
+                    android:background="@drawable/rounded_corner_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/resultdetailpage_productprice" />
+
+                <TextView
+                    style="@style/mediumBlackTextBold"
+                    android:background="@drawable/rounded_corner_bg50"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/resultdetailpage_productprice" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" >
+
+                <TextView
+                    style="@style/mediumBlackTextBold"
+                    android:background="@drawable/rounded_corner_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/resultdetailpage_shipping" />
+
+                <TextView
+                    style="@style/mediumBlackTextBold"
+                    android:background="@drawable/rounded_corner_bg50"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/resultdetailpage_productshipping" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" >
+
+                <TextView
+                    style="@style/mediumBlackTextBold"
+                    android:background="@drawable/rounded_corner_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/resultdetailpage_description" />
+
+                <TextView
+                    style="@style/mediumBlackTextBold"
+                    android:background="@drawable/rounded_corner_bg50"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/resultdetailpage_productdescription"
+                    android:maxLines="3" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+    <View
+        style="@style/divider"
+        android:layout_above="@+id/resultdetailpage_buy_button" />
+
+    <Button
+        android:id="@+id/resultdetailpage_buy_button"
+        style="@style/smallBlackTextBold"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/circle_button_bg_white50"
+        android:drawableTop="@drawable/save_as_50"
+        android:padding="5dp"
+        android:text="@string/resultdetailpage_button_buy" />
+
+    <Button
+        android:id="@+id/resultdetailpage_fav_button"
+        style="@style/smallBlackTextBold"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@+id/resultdetailpage_buy_button"
+        android:background="@drawable/circle_button_bg_white50"
+        android:drawableTop="@drawable/settings_50"
+        android:padding="5dp"
+        android:text="@string/resultdetailpage_button_favorite" />
+
+    <Button
+        android:id="@+id/resultdetailpage_rep_button"
+        style="@style/smallBlackTextBold"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toLeftOf="@+id/resultdetailpage_buy_button"
+        android:background="@drawable/circle_button_bg_white50"
+        android:drawableTop="@drawable/settings_50"
+        android:padding="5dp"
+        android:text="@string/resultdetailpage_button_report" />
+
+</RelativeLayout>
