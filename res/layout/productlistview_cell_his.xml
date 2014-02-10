@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:background="@drawable/rounded_corner_bg50"
+    android:padding="3dp" >
+
+    <ImageView
+        android:id="@+id/cell_his_product_img"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:paddingLeft="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/box2_50" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/cell_his_product_img"
+        android:background="@drawable/rounded_corner_bg50"
+        android:orientation="vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" >
+
+        <TextView
+            android:id="@+id/cell_his_product_name"
+            style="@style/mediumBlackTextBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dp"
+            android:paddingLeft="5dp"
+            android:text="productName" />
+
+        <TextView
+            android:id="@+id/cell_his_product_price"
+            style="@style/mediumBlackText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2dp"
+            android:paddingLeft="5dp"
+            android:text="productPrice" />
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -130,7 +130,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/circle_button_bg_white50"
-        android:drawableTop="@drawable/save_as_50"
+        android:drawableTop="@drawable/put_in_50"
         android:padding="5dp"
         android:text="@string/resultdetailpage_button_buy" />
 
@@ -144,7 +144,7 @@
         android:layout_marginBottom="5dp"
         android:layout_toRightOf="@+id/resultdetailpage_buy_button"
         android:background="@drawable/circle_button_bg_white50"
-        android:drawableTop="@drawable/settings_50"
+        android:drawableTop="@drawable/star_50"
         android:padding="5dp"
         android:text="@string/resultdetailpage_button_favorite" />
 
@@ -158,7 +158,7 @@
         android:layout_marginBottom="5dp"
         android:layout_toLeftOf="@+id/resultdetailpage_buy_button"
         android:background="@drawable/circle_button_bg_white50"
-        android:drawableTop="@drawable/settings_50"
+        android:drawableTop="@drawable/policeman_50"
         android:padding="5dp"
         android:text="@string/resultdetailpage_button_report" />
 

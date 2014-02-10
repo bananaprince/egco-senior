@@ -1,4 +1,4 @@
-package com.egco.storefinderproject.fragment;
+package com.egco.storefinderproject.adapter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,71 +20,93 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.egco.storefinder.model.ProductModel;
+import com.egco.storefinderproject.R;
+import com.egco.storefinderproject.activity.ResultPageDetailActivity;
+import com.egco.storefinderproject.constant.ApplicationConstant;
+import com.squareup.picasso.Picasso;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.ProgressBar;
+import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.egco.storefinder.model.ProductModel;
-import com.egco.storefinderproject.R;
-import com.egco.storefinderproject.adapter.FavoriteListAdapter;
-import com.egco.storefinderproject.adapter.HistoryListAdapter;
-import com.egco.storefinderproject.constant.ApplicationConstant;
-
-public class MainPageFavoriteFragment extends Fragment {
-
-	private ListView favoriteListView;
-	private ProgressBar favoriteProgressBar;
-	private FavoriteListAdapter favoriteAdapter;
-
+public class FavoriteListAdapter extends BaseAdapter{
+	private LayoutInflater layoutInflater;
 	private Context mContext;
-	private String gPlusAccount;
-
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.mainpage_fragment_favorite,
-				container, false);
-
-		favoriteListView = (ListView) rootView
-				.findViewById(R.id.mainpage_favorite_listview);
-
-		favoriteProgressBar = (ProgressBar) rootView
-				.findViewById(R.id.mainpage_favorite_progressbar);
-
-		return rootView;
+	private ArrayList<ProductModel> productList = new ArrayList<ProductModel>();
+	
+	public FavoriteListAdapter(Context mContext,
+			ArrayList<ProductModel> productList) {
+		super();
+		this.mContext = mContext;
+		this.layoutInflater = LayoutInflater.from(mContext);
+		this.productList = productList;
+	}
+	
+	@Override
+	public int getCount() {
+		return productList.size();
 	}
 
 	@Override
-	public void setUserVisibleHint(boolean isVisibleToUser) {
-		super.setUserVisibleHint(isVisibleToUser);
+	public Object getItem(int arg0) {
+		// TODO Auto-generated method stub
+		return arg0;
+	}
 
-		if (isVisibleToUser) {
-			favoriteProgressBar.setVisibility(View.VISIBLE);
-			favoriteProgressBar.bringToFront();
-			new GetFavoriteList().execute();
+	@Override
+	public long getItemId(int arg0) {
+		// TODO Auto-generated method stub
+		return arg0;
+	}
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ImageView productImg;
+		TextView productName;
+		final ProductModel productItem;
+		
+		if(convertView == null) {
+			convertView = layoutInflater.inflate(R.layout.productlistview_cell_fav, null);
 		}
+		
+		productImg = (ImageView) convertView.findViewById(R.id.cell_fav_product_img);
+		productName = (TextView) convertView.findViewById(R.id.cell_fav_product_name);
+		
+		productItem = productList.get(position);
+		
+		Picasso.with(mContext).load(productItem.getProductImgURLFullPath()).placeholder(R.drawable.confused_75).error(R.drawable.cry_75).into(productImg);
+		productName.setText(productItem.getProductName());
+		
+		convertView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				new getProductData().execute(Integer.toString(productItem.getProductID()));
+				
+			}
+		});
+		
+		return convertView;
 	}
+	
+	class getProductData extends AsyncTask<String, String, ProductModel> {
 
-	public void initFavorite(Context mContext, String gPlusAccount) {
-		this.mContext = mContext;
-		this.gPlusAccount = gPlusAccount;
-
-	}
-
-	class GetFavoriteList extends
-			AsyncTask<String, String, ArrayList<ProductModel>> {
-
-		final String PARAM_email = "email";
-
+		final String PARAM_pid = "pid";
+		
 		private final String RESULT_SUCCESS = "success";
 		private final String RESULT_PRODUCTLIST = "productlist";
-
+		
 		private final String RESULT_PID = "pid";
 		private final String RESULT_PRODUCT_NAME = "productname";
 		private final String RESULT_PRODUCT_PRICE = "productprice";
@@ -96,23 +118,24 @@ public class MainPageFavoriteFragment extends Fragment {
 		private final String RESULT_PRODUCT_TYPE = "producttype";
 
 		@Override
-		protected ArrayList<ProductModel> doInBackground(String... params) {
+		protected ProductModel doInBackground(String... params) {
 			ArrayList<ProductModel> resultList = new ArrayList<ProductModel>();
 			InputStream inputStream = null;
 			String jsonDataLine = null;
 			JSONObject jsonDataObject = null;
-
+			
 			try {
 
 				StringBuilder sb = new StringBuilder();
 				sb.append(ApplicationConstant.SERVICE_URL);
-				sb.append(ApplicationConstant.SERVICE_GET_FAVORITE_LIST);
+				sb.append(ApplicationConstant.SERVICE_GET_PRODUCT_DATA);
 				String url = sb.toString();
 
 				Log.v("url=", url);
 
 				List<NameValuePair> entity = new ArrayList<NameValuePair>();
-				entity.add(new BasicNameValuePair(PARAM_email, gPlusAccount));
+				entity.add(new BasicNameValuePair(PARAM_pid,
+						params[0]));
 
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(url);
@@ -130,7 +153,7 @@ public class MainPageFavoriteFragment extends Fragment {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
+			
 			try {
 				BufferedReader bufferedReader = new BufferedReader(
 						new InputStreamReader(inputStream, "iso-8859-1"), 8);
@@ -145,7 +168,7 @@ public class MainPageFavoriteFragment extends Fragment {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
+			
 			try {
 				Log.v("result", jsonDataLine);
 
@@ -158,21 +181,13 @@ public class MainPageFavoriteFragment extends Fragment {
 						JSONObject product = jsonDataArray.getJSONObject(i);
 						ProductModel tempModel = new ProductModel();
 						tempModel.setProductID(product.getInt(RESULT_PID));
-						tempModel.setProductName(product
-								.getString(RESULT_PRODUCT_NAME));
-						tempModel.setPrice(product
-								.getDouble(RESULT_PRODUCT_PRICE));
-						tempModel.setProductImgURL(product
-								.getString(RESULT_PRODUCT_IMG));
-						tempModel.setDiscount(product
-								.getDouble(RESULT_PRODUCT_DISCOUNT));
-						tempModel.setShippingCost(product
-								.getDouble(RESULT_PRODUCT_SHIPPING));
-						tempModel.setAvailable(product
-								.getInt(RESULT_PRODUCT_AVAILABLE) == 1 ? true
-								: false);
-						tempModel.setDescription(product
-								.getString(RESULT_PRODUCT_DESCRIPTION));
+						tempModel.setProductName(product.getString(RESULT_PRODUCT_NAME));
+						tempModel.setPrice(product.getDouble(RESULT_PRODUCT_PRICE));
+						tempModel.setProductImgURL(product.getString(RESULT_PRODUCT_IMG));
+						tempModel.setDiscount(product.getDouble(RESULT_PRODUCT_DISCOUNT));
+						tempModel.setShippingCost(product.getDouble(RESULT_PRODUCT_SHIPPING));
+						tempModel.setAvailable(product.getInt(RESULT_PRODUCT_AVAILABLE) == 1 ? true : false);
+						tempModel.setDescription(product.getString(RESULT_PRODUCT_DESCRIPTION));
 						tempModel.setType(product.getInt(RESULT_PRODUCT_TYPE));
 						resultList.add(tempModel);
 					}
@@ -184,19 +199,17 @@ public class MainPageFavoriteFragment extends Fragment {
 				e.printStackTrace();
 			}
 
-			return resultList;
+			return resultList.get(0);
 		}
 
 		@Override
-		protected void onPostExecute(ArrayList<ProductModel> result) {
+		protected void onPostExecute(ProductModel result) {
 			super.onPostExecute(result);
-
-			Log.v("FavoriteList", "size =" + result.size());
-
-			favoriteAdapter = new FavoriteListAdapter(mContext, result);
-			favoriteListView.setAdapter(favoriteAdapter);
-
-			favoriteProgressBar.setVisibility(View.GONE);
+			Intent intent = new Intent(mContext, ResultPageDetailActivity.class);
+			intent.putExtra(ApplicationConstant.INTENT_PRODUCT_MODEL, result);
+			mContext.startActivity(intent);
 		}
+		
 	}
+	
 }

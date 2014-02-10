@@ -40,7 +40,9 @@ import com.google.android.gms.plus.PlusClient;
 import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
@@ -83,6 +85,7 @@ public class ProductDetailPageActivity extends Activity implements
 	private EditText productShippingValue;
 	private Button submitButton;
 	private Button deleteButton;
+	private Button infoButton;
 	private Spinner productTypeSpinner;
 	private EditText productDiscountValue;
 	private EditText productDiscountPercentage;
@@ -122,6 +125,7 @@ public class ProductDetailPageActivity extends Activity implements
 		productShippingValue = (EditText) findViewById(R.id.productdetailpage_product_shipping_value);
 		submitButton = (Button) findViewById(R.id.productdetailpage_submit_button);
 		deleteButton = (Button) findViewById(R.id.productdetailpage_delete_button);
+		infoButton = (Button) findViewById(R.id.productdetailpage_info_button);
 		productTypeSpinner = (Spinner) findViewById(R.id.productdetailpage_product_type_spinner_value);
 		productDiscountValue = (EditText) findViewById(R.id.productdetailpage_product_discount_value);
 		productDiscountPercentage = (EditText) findViewById(R.id.productdetailpage_product_discount_percentage);
@@ -134,6 +138,8 @@ public class ProductDetailPageActivity extends Activity implements
 
 		availableRow = (TableRow) findViewById(R.id.productdetailpage_product_available_row);
 		discountRow = (TableRow) findViewById(R.id.productdetailpage_product_discount_row);
+		
+		infoButton.setOnClickListener(onInfoButtonClick);
 
 		if (ApplicationConstant.ACTION_PRODUCT_DETAIL_ADD
 				.equalsIgnoreCase(action)) {
@@ -160,6 +166,7 @@ public class ProductDetailPageActivity extends Activity implements
 
 	void initEdit() {
 		submitButton.setOnClickListener(onEditSubmitButtonClick);
+		submitButton.setText(R.string.productdetailpage_submit_ok);
 		deleteButton.setOnClickListener(onEditDeleteButtonClick);
 		editItemModel = (ProductModel) getIntent().getSerializableExtra(
 				ApplicationConstant.INTENT_PRODUCT_MODEL);
@@ -201,14 +208,11 @@ public class ProductDetailPageActivity extends Activity implements
 				Bitmap productImageBitmap = (Bitmap) data
 						.getParcelableExtra(ApplicationConstant.INTENT_CROPPED_IMAGE);
 				productImageBitmap = BitmapUtils.addWatermark(
-						productImageBitmap, "#egcoStorefinder", 5);
+						productImageBitmap, "#priceTile", 5);
 				productImg.setImageBitmap(productImageBitmap);
 				productImgBitmap = productImageBitmap;
 			} else {
 				Log.v("product detauk", "didn't get image");
-				ToastUtils.getToast(mContext, "Something wrong",
-						ToastUtils.STYLE_ERROR_RED, ToastUtils.DURATION_SHORT)
-						.show();
 			}
 
 	}
@@ -233,13 +237,16 @@ public class ProductDetailPageActivity extends Activity implements
 		public void onFocusChange(View v, boolean hasFocus) {
 			if (hasFocus == false) {
 				String text = ((EditText) v).getText().toString();
-				if (text != null) {
-					if (Double.parseDouble(text) < 0) {
+				if (text.equalsIgnoreCase("")) {
+					text = "0.00";
+				} else {
+					if (Double.parseDouble(text) < 0.00f) {
 						text = "0.00";
 					}
-					DecimalFormat df = new DecimalFormat("#.##");
-					((EditText) v).setText(df.format(Double.parseDouble(text)));
 				}
+
+				DecimalFormat df = new DecimalFormat("#.##");
+				((EditText) v).setText(df.format(Double.parseDouble(text)));
 			}
 
 		}
@@ -252,10 +259,12 @@ public class ProductDetailPageActivity extends Activity implements
 			if (hasFocus == false) {
 				EditText currentView = (EditText) v;
 
-				double priceValue = Double.parseDouble(productPriceValue
-						.getText().toString());
-				double discountValue = Double.parseDouble(productDiscountValue
-						.getText().toString());
+				double priceValue = productPriceValue.getText().toString()
+						.equalsIgnoreCase("") ? 0.0f : Double
+						.parseDouble(productPriceValue.getText().toString());
+				double discountValue = productDiscountValue.getText()
+						.toString().equalsIgnoreCase("") ? priceValue : Double
+						.parseDouble(productDiscountValue.getText().toString());
 				double discountPercentage = Double
 						.parseDouble(productDiscountPercentage.getText()
 								.toString());
@@ -265,6 +274,7 @@ public class ProductDetailPageActivity extends Activity implements
 					discountValue = priceValue;
 					discountPercentage = 0f;
 
+					productPriceValue.setText(df.format(priceValue));
 					productDiscountValue.setText(df.format(discountValue));
 					productDiscountPercentage.setText(Long.toString(Math
 							.round(discountPercentage)));
@@ -275,6 +285,7 @@ public class ProductDetailPageActivity extends Activity implements
 
 					productDiscountPercentage.setText(Long.toString(Math
 							.round(discountPercentage)));
+					productDiscountValue.setText(df.format(discountValue));
 				}
 
 			}
@@ -286,10 +297,58 @@ public class ProductDetailPageActivity extends Activity implements
 
 		@Override
 		public void onClick(View v) {
-			progressBar.setVisibility(View.VISIBLE);
-			progressBar.bringToFront();
 
-			new addNewProductAsyncTask().execute();
+			if ("".equalsIgnoreCase(productNameValue.getText().toString())) {
+
+				ToastUtils.getToast(mContext, "Please specific product name",
+						ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_SHORT)
+						.show();
+
+			} else if ("".equalsIgnoreCase(productPriceValue.getText()
+					.toString())) {
+				ToastUtils.getToast(mContext, "Please specific product price",
+						ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_SHORT)
+						.show();
+
+			} else if ("".equalsIgnoreCase(productDescriptionValue.getText()
+					.toString())) {
+				ToastUtils.getToast(mContext,
+						"Please specific product description",
+						ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_SHORT)
+						.show();
+
+			} else if (productImgBitmap == null) {
+				ToastUtils.getToast(mContext, "Please select product picture",
+						ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_SHORT)
+						.show();
+			} else {
+
+				progressBar.setVisibility(View.VISIBLE);
+				progressBar.bringToFront();
+
+				new addNewProductAsyncTask().execute();
+			}
+		}
+	};
+	
+	private OnClickListener onInfoButtonClick = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+			alertDialogBuilder.setMessage("Add some #hashtag in your description to show off your product");
+			alertDialogBuilder.setCancelable(false);
+			alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					
+				}
+			});
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
+			
 		}
 	};
 
@@ -297,21 +356,66 @@ public class ProductDetailPageActivity extends Activity implements
 
 		@Override
 		public void onClick(View v) {
-			progressBar.setVisibility(View.VISIBLE);
-			progressBar.bringToFront();
 
-			new productEditAsyncTask().execute();
+			if ("".equalsIgnoreCase(productPriceValue.getText().toString())) {
+				ToastUtils.getToast(mContext, "Please specific product price",
+						ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_SHORT)
+						.show();
+			} else if ("".equalsIgnoreCase(productDiscountValue.getText()
+					.toString())) {
+				ToastUtils.getToast(mContext,
+						"Please specific product discount price",
+						ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_SHORT)
+						.show();
+			} else if ("".equalsIgnoreCase(productShippingValue.getText()
+					.toString())) {
+				ToastUtils.getToast(mContext,
+						"Please specific product shipping price",
+						ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_SHORT)
+						.show();
+			} else {
+
+				progressBar.setVisibility(View.VISIBLE);
+				progressBar.bringToFront();
+
+				new productEditAsyncTask().execute();
+			}
 		}
 	};
-	
+
 	OnClickListener onEditDeleteButtonClick = new OnClickListener() {
-		
+
 		@Override
 		public void onClick(View v) {
-			progressBar.setVisibility(View.VISIBLE);
-			progressBar.bringToFront();
-			
-			new productDeleteAsyncTask().execute();
+
+			AlertDialog.Builder adBuilder = new AlertDialog.Builder(mContext);
+			adBuilder.setTitle("Confirmation");
+			adBuilder.setMessage("Are you sure?");
+			adBuilder.setCancelable(false);
+			adBuilder.setPositiveButton("Yes",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+
+							progressBar.setVisibility(View.VISIBLE);
+							progressBar.bringToFront();
+
+							new productDeleteAsyncTask().execute();
+
+						}
+					});
+			adBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
+					
+				}
+			});
+			AlertDialog alertDialog = adBuilder.create();
+			alertDialog.show();
+
 		}
 	};
 
@@ -433,12 +537,12 @@ public class ProductDetailPageActivity extends Activity implements
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if(result == 1) {
+			if (result == 1) {
 				progressBar.setVisibility(View.GONE);
 				finish();
 			} else {
 				progressBar.setVisibility(View.GONE);
-				
+
 			}
 		}
 
@@ -447,14 +551,14 @@ public class ProductDetailPageActivity extends Activity implements
 	class productEditAsyncTask extends AsyncTask<String, String, Integer> {
 
 		private final String RESULT_success = "success";
-		
+
 		private final String PARAM_merchantemail = "merchantemail";
 		private final String PARAM_productprice = "productprice";
 		private final String PARAM_productdiscount = "productdiscount";
 		private final String PARAM_productshipping = "productshipping";
 		private final String PARAM_productavailable = "productavailable";
 		private final String PARAM_producttype = "producttype";
-		
+
 		private final String PARAM_pid = "pid";
 
 		@Override
@@ -483,16 +587,16 @@ public class ProductDetailPageActivity extends Activity implements
 								.getText().toString()));
 				String producttype = Integer.toString(productTypeSpinner
 						.getSelectedItemPosition());
-				String productdiscount = df.format(Double
-						.parseDouble(productDiscountValue.getText().toString()));
+				String productdiscount = df
+						.format(Double.parseDouble(productDiscountValue
+								.getText().toString()));
 				String productavailable = productAvailableValue.isChecked() ? "1"
 						: "0";
 
 				List<NameValuePair> entity = new ArrayList<NameValuePair>();
 				entity.add(new BasicNameValuePair(PARAM_merchantemail,
 						merchantemail));
-				entity.add(new BasicNameValuePair(PARAM_pid,
-						pid));
+				entity.add(new BasicNameValuePair(PARAM_pid, pid));
 				entity.add(new BasicNameValuePair(PARAM_productprice,
 						productprice));
 				entity.add(new BasicNameValuePair(PARAM_productdiscount,
@@ -621,9 +725,8 @@ public class ProductDetailPageActivity extends Activity implements
 				String producttype = Integer.toString(productTypeSpinner
 						.getSelectedItemPosition());
 
-				String productdiscount = df
-						.format(Double.parseDouble(productPriceValue
-								.getText().toString()));
+				String productdiscount = df.format(Double
+						.parseDouble(productPriceValue.getText().toString()));
 				String productavailable = "1";
 
 				Bitmap tempProductImgBitmap = productImgBitmap;
@@ -658,9 +761,10 @@ public class ProductDetailPageActivity extends Activity implements
 				entity.add(new BasicNameValuePair(PARAM_productimgsrc,
 						imageString));
 				entity.add(new BasicNameValuePair(PARAM_producthash,
-						getHashTagList(productdescription).toString()));
+						getHashTagList(productdescription, productname)
+								.toString()));
 				entity.add(new BasicNameValuePair(PARAM_productword,
-						getWordList(productdescription).toString()));
+						getWordList(productdescription, productname).toString()));
 
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(url);
@@ -725,16 +829,26 @@ public class ProductDetailPageActivity extends Activity implements
 
 	}
 
-	private JSONArray getHashTagList(String s) {
+	private JSONArray getHashTagList(String s,String productName) {
 		ArrayList<String> hashList = new ArrayList<String>();
 		HashSet<String> set = new HashSet<String>();
 
+		s = s.replaceAll(" +", " ");
+		
 		String[] arr = s.split(" ");
 		for (int i = 0; i < arr.length; i++) {
 			if (arr[i].charAt(0) == '#') {
 				arr[i] = arr[i].replaceAll("[_-]", "").toLowerCase();
-				set.add(arr[i]);
+				if(!"".equalsIgnoreCase(arr[i]) && arr[i].length() > 1) {
+					set.add(arr[i]);
+				}
 			}
+		}
+		if(!"".equalsIgnoreCase(productName)) {
+			set.add("#"+productName);
+		}
+		if(set.size() == 0) {
+			set.add("#"+s);
 		}
 		hashList.addAll(set);
 
@@ -745,19 +859,30 @@ public class ProductDetailPageActivity extends Activity implements
 		return jArr;
 	}
 
-	private JSONArray getWordList(String s) {
+	private JSONArray getWordList(String s,String productName) {
+		
+		String ss = s;
 		ArrayList<String> wordList = new ArrayList<String>();
 		HashSet<String> set = new HashSet<String>();
-
-		s = s.replaceAll("[!@#$%^&*()-_+={}/?><]", "").toLowerCase();
+		s = s.replaceAll(" +", " ");
+		s = s.replaceAll("[!@#$%^&*()_+={}/?><]", " ").toLowerCase();
 		String[] arr = s.split(" ");
 		for (int i = 0; i < arr.length; i++) {
 			int index = Arrays.binarySearch(shortStopWord, arr[i]);
 			if (index < 0 || index >= shortStopWord.length) {
-				set.add(arr[i]);
+				if(!"".equalsIgnoreCase(arr[i]) && arr[i].length() > 2) {
+					set.add(arr[i]);
+				}
 			}
 		}
+		if(!"".equalsIgnoreCase(productName)) {
+			set.add(productName);
+		}
+		if(set.size() == 0) {
+			set.add(ss);
+		}
 		wordList.addAll(set);
+		
 		JSONArray jArr = new JSONArray();
 		for (int i = 0; i < wordList.size(); i++) {
 			jArr.put(wordList.get(i));

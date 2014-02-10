@@ -18,12 +18,16 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.ActionBar.Tab;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Color;
@@ -44,13 +48,19 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.egco.storefinder.model.ProductModel;
 import com.egco.storefinderproject.R;
+import com.egco.storefinderproject.adapter.FavoriteListAdapter;
+import com.egco.storefinderproject.adapter.HistoryListAdapter;
 import com.egco.storefinderproject.adapter.MainPageViewPagerAdapter;
 import com.egco.storefinderproject.constant.ApplicationConstant;
+import com.egco.storefinderproject.fragment.MainPageFavoriteFragment;
+import com.egco.storefinderproject.fragment.MainPageHistoryFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -70,6 +80,7 @@ public class MainPageActivity extends FragmentActivity implements
 	private EditText queryTextHighlight;
 	private ImageView querySubmit;
 	private Button storeButton;
+	private Button infoButton;
 	
 	private Fragment mainFragment;
 	private Fragment historyFragment;
@@ -186,6 +197,7 @@ public class MainPageActivity extends FragmentActivity implements
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		initMainFragmentLayout();
+		initFavoriteAndHistory();
 
 	}
 
@@ -218,9 +230,40 @@ public class MainPageActivity extends FragmentActivity implements
 
 		storeButton = (Button) mainFragment.getView().findViewById(R.id.mainpage_storepage_button);
 		storeButton.setOnClickListener(onStoreButtonClick);
+		infoButton = (Button) mainFragment.getView().findViewById(R.id.mainpage_info_button);
+		infoButton.setOnClickListener(onInfoButtonClick);
 
 		progressBar.setVisibility(View.GONE);
 	}
+	
+	private void initFavoriteAndHistory() {
+
+		
+		((MainPageFavoriteFragment)favoriteFragment).initFavorite(mContext, gPlusClient.getAccountName());
+		((MainPageHistoryFragment)historyFragment).initHistory(mContext, gPlusClient.getAccountName());
+
+	}
+	
+	private OnClickListener onInfoButtonClick = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+			alertDialogBuilder.setMessage("Add some #hashtag in your query to accurate the result");
+			alertDialogBuilder.setCancelable(false);
+			alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					
+				}
+			});
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
+			
+		}
+	};
 
 	private OnClickListener onStoreButtonClick = new OnClickListener() {
 

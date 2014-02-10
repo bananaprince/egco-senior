@@ -269,5 +269,19 @@
         android:drawableTop="@drawable/trash_50"
         android:padding="5dp"
         android:text="@string/productdetailpage_delete" />
+    
+        <Button
+        android:id="@+id/productdetailpage_info_button"
+        style="@style/smallBlackTextBold"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toLeftOf="@+id/productdetailpage_submit_button"
+        android:background="@drawable/circle_button_bg_white50"
+        android:drawableTop="@drawable/info_50"
+        android:padding="5dp"
+        android:text="@string/productdetailpage_info" />
 
 </RelativeLayout>

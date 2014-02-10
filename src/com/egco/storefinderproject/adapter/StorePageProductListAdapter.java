@@ -70,7 +70,6 @@ public class StorePageProductListAdapter extends BaseAdapter {
 		
 		productItem = productList.get(position);
 		
-		// TODO: decide available and change every money to bigdecimal!!
 		Picasso.with(mContext).load(productItem.getProductImgURLFullPath()).placeholder(R.drawable.confused_75).error(R.drawable.cry_75).into(productImg);
 		productName.setText(productItem.getProductName());
 		productPrice.setText(Double.toString(productItem.getPrice()));

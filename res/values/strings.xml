@@ -7,14 +7,15 @@
     <string name="mainpage_main_search_message2">or let\'s see what is hot!</string>
     <string name="mainpage_main_hottag_temp">#HotTag</string>
     <string name="mainpage_main_storepage_button">Store</string>
+    <string name="mainpage_main_info_button">Info</string>
     
     <string name="storepage_mainpage_button">Home</string>
     <string name="storepage_setting_button">Setting</string>
+    <string name="storepage_info_button">Info</string>
     <string name="storepage_addnewitem">Add New Product</string>
     
     <string name="resultpage_queryinstruction">Let\'s find what you want!</string>
     <string name="resultpage_queryplaceholder">Type your query here</string>
-    
     <string name="resultdetailpage_productname">Product:</string>
     <string name="resultdetailpage_productprice">Price:</string>
     <string name="resultdetailpage_shipping">Shipping:</string>
@@ -43,6 +44,7 @@
     <string name="productdetailpage_submit_finish">Finish</string>
     <string name="productdetailpage_submit_ok">OK</string>
     <string name="productdetailpage_delete">Delete</string>
+    <string name="productdetailpage_info">Info</string>
     
     <string name="imagecropperpage_submit_button">OK</string>
     <string name="imagecropperpage_instruction">Touch Here to Select Image.</string>

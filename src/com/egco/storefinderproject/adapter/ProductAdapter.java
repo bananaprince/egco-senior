@@ -1,6 +1,7 @@
 package com.egco.storefinderproject.adapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
@@ -12,6 +13,7 @@ import com.egco.storefinderproject.constant.ApplicationConstant;
 import android.content.Context;
 import android.content.Intent;
 import android.sax.StartElementListener;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -24,6 +26,7 @@ public class ProductAdapter extends BaseAdapter {
 	private ArrayList<ProductModel> productList;
 	private Context mContext;
 	private int baseSize;
+	private long percentile80;
 
 	public ProductAdapter(Context context,int tBaseSize) {
 		productList = new ArrayList<ProductModel>();
@@ -33,6 +36,13 @@ public class ProductAdapter extends BaseAdapter {
 	
 	public void setProductList(ArrayList<ProductModel> productList) {
 		this.productList = productList;
+		
+		long poularity[] = new long[productList.size()];
+		for(int i=0;i<poularity.length;i++)
+			poularity[i] = productList.get(i).getPopularity();
+		Arrays.sort(poularity);
+		percentile80 = poularity[(int)(Math.floor(0.8*poularity.length))];
+		Log.v("TAGGGGGGGG", "popularity ======= "+percentile80);
 	}
 
 	@Override
@@ -72,7 +82,7 @@ public class ProductAdapter extends BaseAdapter {
 			productView.setId(item.getProductID());
 			
 			// TODO: unmocking
-			if(item.getPopularity() > 800) {
+			if(item.getPopularity() > percentile80) {
 				productView.setProductImageByURL(item.getProductImgURLFullPath(), baseSize*2, baseSize*2);
 				
 				GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();

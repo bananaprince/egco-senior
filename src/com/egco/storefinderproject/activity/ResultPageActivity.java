@@ -50,6 +50,7 @@ import com.egco.storefinder.model.ProductModel;
 import com.egco.storefinderproject.R;
 import com.egco.storefinderproject.adapter.ProductAdapter;
 import com.egco.storefinderproject.constant.ApplicationConstant;
+import com.egco.storefinderproject.utils.ToastUtils;
 import com.squareup.picasso.Picasso;
 
 public class ResultPageActivity extends Activity {
@@ -194,7 +195,9 @@ public class ResultPageActivity extends Activity {
 		private final String RESULT_PRODUCT_AVAILABLE = "productavailable";
 		private final String RESULT_PRODUCT_DESCRIPTION = "productdescription";
 		private final String RESULT_PRODUCT_TYPE = "producttype";
-
+		private final String RESULT_PRODUCT_POPULARITY1 = "productpopularity1";
+		private final String RESULT_PRODUCT_POPULARITY2 = "productpopularity2";
+		
 		private String[] shortStopWord = { "a", "about", "an", "are", "as",
 				"at", "be", "by", "com", "for", "from", "how", "in", "is",
 				"it", "of", "on", "or", "that", "the", "this", "to", "was",
@@ -220,9 +223,9 @@ public class ResultPageActivity extends Activity {
 				List<NameValuePair> entity = new ArrayList<NameValuePair>();
 
 				entity.add(new BasicNameValuePair(PARAM_Product_Hash,
-						getHashTagList(params[0]).toString()));
+						getHashTagList(params[0],"").toString()));
 				entity.add(new BasicNameValuePair(PARAM_Product_Word,
-						getWordList(params[0]).toString()));
+						getWordList(params[0],"").toString()));
 
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(url);
@@ -266,9 +269,6 @@ public class ResultPageActivity extends Activity {
 					JSONArray jsonDataArray = jsonDataObject
 							.getJSONArray(RESULT_PRODUCTLIST);
 
-					// TODO: unmocking
-					Random ran = new Random();
-
 					for (int i = 0; i < jsonDataArray.length(); i++) {
 						JSONObject product = jsonDataArray.getJSONObject(i);
 						ProductModel tempModel = new ProductModel();
@@ -291,7 +291,7 @@ public class ResultPageActivity extends Activity {
 						tempModel.setDescription(product
 								.getString(RESULT_PRODUCT_DESCRIPTION));
 						tempModel.setType(product.getInt(RESULT_PRODUCT_TYPE));
-						tempModel.setPopularity(ran.nextInt(1001));
+						tempModel.setPopularity(product.getInt(RESULT_PRODUCT_POPULARITY2)-product.getInt(RESULT_PRODUCT_POPULARITY1));
 						resultList.add(tempModel);
 					}
 				} else {
@@ -310,27 +310,40 @@ public class ResultPageActivity extends Activity {
 			super.onPostExecute(result);
 
 			gridLayout.removeAllViews();
-			productAdapter.setProductList(result);
-			ArrayList<View> viewList = productAdapter.getViewList();
-			Log.v("TAGG", "size == " + viewList.size());
-			for (int i = 0; i < viewList.size(); i++) {
-				gridLayout.addView(viewList.get(i));
+			if(result.size() > 0) {
+				productAdapter.setProductList(result);
+				ArrayList<View> viewList = productAdapter.getViewList();
+				Log.v("TAGG", "size == " + viewList.size());
+				for (int i = 0; i < viewList.size(); i++) {
+					gridLayout.addView(viewList.get(i));
+				}
+			} else {
+				ToastUtils.getToast(mContext, "No Matching item", ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_SHORT);
 			}
-
 			progressBar.setVisibility(View.GONE);
 
 		}
 
-		private JSONArray getHashTagList(String s) {
+		private JSONArray getHashTagList(String s,String productName) {
 			ArrayList<String> hashList = new ArrayList<String>();
 			HashSet<String> set = new HashSet<String>();
 
+			s = s.replaceAll(" +", " ");
+			
 			String[] arr = s.split(" ");
 			for (int i = 0; i < arr.length; i++) {
 				if (arr[i].charAt(0) == '#') {
 					arr[i] = arr[i].replaceAll("[_-]", "").toLowerCase();
-					set.add(arr[i]);
+					if(!"".equalsIgnoreCase(arr[i]) && arr[i].length() > 1) {
+						set.add(arr[i]);
+					}
 				}
+			}
+			if(!"".equalsIgnoreCase(productName)) {
+				set.add("#"+productName);
+			}
+			if(set.size() == 0) {
+				set.add("#"+s);
 			}
 			hashList.addAll(set);
 
@@ -341,19 +354,30 @@ public class ResultPageActivity extends Activity {
 			return jArr;
 		}
 
-		private JSONArray getWordList(String s) {
+		private JSONArray getWordList(String s,String productName) {
+			
+			String ss = s;
 			ArrayList<String> wordList = new ArrayList<String>();
 			HashSet<String> set = new HashSet<String>();
-
-			s = s.replaceAll("[!@#$%^&*()-_+={}/?><]", "").toLowerCase();
+			s = s.replaceAll(" +", " ");
+			s = s.replaceAll("[!@#$%^&*()_+={}/?><]", " ").toLowerCase();
 			String[] arr = s.split(" ");
 			for (int i = 0; i < arr.length; i++) {
 				int index = Arrays.binarySearch(shortStopWord, arr[i]);
 				if (index < 0 || index >= shortStopWord.length) {
-					set.add(arr[i]);
+					if(!"".equalsIgnoreCase(arr[i]) && arr[i].length() > 2) {
+						set.add(arr[i]);
+					}
 				}
 			}
+			if(!"".equalsIgnoreCase(productName)) {
+				set.add(productName);
+			}
+			if(set.size() == 0) {
+				set.add(ss);
+			}
 			wordList.addAll(set);
+			
 			JSONArray jArr = new JSONArray();
 			for (int i = 0; i < wordList.size(); i++) {
 				jArr.put(wordList.get(i));

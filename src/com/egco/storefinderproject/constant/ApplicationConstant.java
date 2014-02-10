@@ -21,6 +21,7 @@ public class ApplicationConstant {
 	public static final String SERVICE_REPORT = "db_addreport.php";
 	public static final String SERVICE_ADD_TRANSACTION = "db_addtransaction.php";
 	public static final String SERVICE_GET_TRANSACTION = "db_gettransactionlist.php";
+	public static final String SERVICE_GET_PRODUCT_DATA = "db_getproductdata.php";
 
 	public static final String PAGE_PREVIOUS = "_previousPAGE_";
 

@@ -70,6 +70,7 @@
                 android:drawableTop="@drawable/settings_50"
                 android:padding="5dp"
                 android:text="@string/storepage_setting_button" />
+
         </RelativeLayout>
     </LinearLayout>
 

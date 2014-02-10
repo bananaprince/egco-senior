@@ -11,10 +11,12 @@ import com.egco.storefinderproject.utils.ToastUtils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -87,29 +89,40 @@ public class ImageCropperPageActivity extends Activity {
 				progressBar.setVisibility(View.VISIBLE);
 				progressBar.bringToFront();
 
+//				Uri selectedImage = data.getData();
+//
+//				InputStream imageStream = null;
+//				try {
+//					imageStream = getContentResolver().openInputStream(
+//							selectedImage);
+//
+//				} catch (FileNotFoundException e) {
+//					e.printStackTrace();
+//				}
+				
 				Uri selectedImage = data.getData();
-
-				InputStream imageStream = null;
-				try {
-					imageStream = getContentResolver().openInputStream(
-							selectedImage);
-
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-				Bitmap selectImageBitmap = BitmapFactory
-						.decodeStream(imageStream);
+		         String[] filePathColumn = { MediaStore.Images.Media.DATA };
+		 
+		         Cursor cursor = getContentResolver().query(selectedImage,
+		                 filePathColumn, null, null, null);
+		         cursor.moveToFirst();
+		 
+		         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+		         String picturePath = cursor.getString(columnIndex);
+		         cursor.close();
+				
+				Bitmap selectImageBitmap = BitmapFactory.decodeFile(picturePath);
 
 				Log.v("ImageCropperPage", "original image file size (w x h) = "
 						+ selectImageBitmap.getWidth() + " x "
 						+ selectImageBitmap.getHeight());
 
 				// scaled image
-				if (selectImageBitmap.getWidth() > 512
-						|| selectImageBitmap.getHeight() > 512) {
+				if (selectImageBitmap.getWidth() > 300
+						|| selectImageBitmap.getHeight() > 300) {
 					int largerDim = Math.max(selectImageBitmap.getWidth(),
 							selectImageBitmap.getHeight());
-					double scale = 512.0f / (double) largerDim;
+					double scale = 300.0f / (double) largerDim;
 
 					selectImageBitmap = Bitmap.createScaledBitmap(
 							selectImageBitmap,
