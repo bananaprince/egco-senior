@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -44,6 +45,7 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.egco.storefinder.model.ProductModel;
@@ -61,10 +63,14 @@ public class ResultPageActivity extends Activity {
 	private EditText queryEditText;
 	private EditText queryTextHighlight;
 	private ImageView querySubmit;
+	private TextView queryTimeText;
 
 	private ProgressBar progressBar;
 
 	private Context mContext;
+
+	private long queryTime;
+	private boolean isAsc = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +94,7 @@ public class ResultPageActivity extends Activity {
 		queryTextHighlight = (EditText) findViewById(R.id.resultpage_search_query_highlight);
 		querySubmit = (ImageView) findViewById(R.id.resultpage_search_submit_query_img);
 		progressBar = (ProgressBar) findViewById(R.id.resultpage_progressbar);
+		queryTimeText = (TextView) findViewById(R.id.resultpage_search_submit_query_time);
 
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
@@ -181,6 +188,10 @@ public class ResultPageActivity extends Activity {
 
 		private final String PARAM_Product_Hash = "producthash";
 		private final String PARAM_Product_Word = "productword";
+		private final String PARAM_ISASC = "isasc";
+
+		private final String TASK_CONST_ASC = "ASC";
+		private final String TASK_CONST_DESC = "DESC";
 
 		private final String RESULT_SUCCESS = "success";
 		private final String RESULT_PRODUCTLIST = "productlist";
@@ -197,7 +208,7 @@ public class ResultPageActivity extends Activity {
 		private final String RESULT_PRODUCT_TYPE = "producttype";
 		private final String RESULT_PRODUCT_POPULARITY1 = "productpopularity1";
 		private final String RESULT_PRODUCT_POPULARITY2 = "productpopularity2";
-		
+
 		private String[] shortStopWord = { "a", "about", "an", "are", "as",
 				"at", "be", "by", "com", "for", "from", "how", "in", "is",
 				"it", "of", "on", "or", "that", "the", "this", "to", "was",
@@ -223,9 +234,17 @@ public class ResultPageActivity extends Activity {
 				List<NameValuePair> entity = new ArrayList<NameValuePair>();
 
 				entity.add(new BasicNameValuePair(PARAM_Product_Hash,
-						getHashTagList(params[0],"").toString()));
+						getHashTagList(params[0], "").toString()));
 				entity.add(new BasicNameValuePair(PARAM_Product_Word,
-						getWordList(params[0],"").toString()));
+						getWordList(params[0], "").toString()));
+
+				if (isAsc) {
+					entity.add(new BasicNameValuePair(PARAM_ISASC,
+							TASK_CONST_ASC));
+				} else {
+					entity.add(new BasicNameValuePair(PARAM_ISASC,
+							TASK_CONST_DESC));
+				}
 
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(url);
@@ -291,7 +310,9 @@ public class ResultPageActivity extends Activity {
 						tempModel.setDescription(product
 								.getString(RESULT_PRODUCT_DESCRIPTION));
 						tempModel.setType(product.getInt(RESULT_PRODUCT_TYPE));
-						tempModel.setPopularity(product.getInt(RESULT_PRODUCT_POPULARITY2)-product.getInt(RESULT_PRODUCT_POPULARITY1));
+						tempModel.setPopularity(product
+								.getInt(RESULT_PRODUCT_POPULARITY2)
+								- product.getInt(RESULT_PRODUCT_POPULARITY1));
 						resultList.add(tempModel);
 					}
 				} else {
@@ -310,7 +331,7 @@ public class ResultPageActivity extends Activity {
 			super.onPostExecute(result);
 
 			gridLayout.removeAllViews();
-			if(result.size() > 0) {
+			if (result.size() > 0) {
 				productAdapter.setProductList(result);
 				ArrayList<View> viewList = productAdapter.getViewList();
 				Log.v("TAGG", "size == " + viewList.size());
@@ -318,32 +339,37 @@ public class ResultPageActivity extends Activity {
 					gridLayout.addView(viewList.get(i));
 				}
 			} else {
-				ToastUtils.getToast(mContext, "No Matching item", ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_SHORT);
+				ToastUtils.getToast(mContext, "No Matching item",
+						ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_SHORT);
 			}
 			progressBar.setVisibility(View.GONE);
 
+			queryTime = System.currentTimeMillis();
+			queryTimeText.setText("As of " + (new Date(queryTime)));
+			productAdapter.setQueryTime(queryTime);
+
 		}
 
-		private JSONArray getHashTagList(String s,String productName) {
+		private JSONArray getHashTagList(String s, String productName) {
 			ArrayList<String> hashList = new ArrayList<String>();
 			HashSet<String> set = new HashSet<String>();
 
 			s = s.replaceAll(" +", " ");
-			
+
 			String[] arr = s.split(" ");
 			for (int i = 0; i < arr.length; i++) {
 				if (arr[i].charAt(0) == '#') {
 					arr[i] = arr[i].replaceAll("[_-]", "").toLowerCase();
-					if(!"".equalsIgnoreCase(arr[i]) && arr[i].length() > 1) {
+					if (!"".equalsIgnoreCase(arr[i]) && arr[i].length() > 1) {
 						set.add(arr[i]);
 					}
 				}
 			}
-			if(!"".equalsIgnoreCase(productName)) {
-				set.add("#"+productName);
+			if (!"".equalsIgnoreCase(productName)) {
+				set.add("#" + productName);
 			}
-			if(set.size() == 0) {
-				set.add("#"+s);
+			if (set.size() == 0) {
+				set.add("#" + s);
 			}
 			hashList.addAll(set);
 
@@ -354,8 +380,8 @@ public class ResultPageActivity extends Activity {
 			return jArr;
 		}
 
-		private JSONArray getWordList(String s,String productName) {
-			
+		private JSONArray getWordList(String s, String productName) {
+
 			String ss = s;
 			ArrayList<String> wordList = new ArrayList<String>();
 			HashSet<String> set = new HashSet<String>();
@@ -365,19 +391,19 @@ public class ResultPageActivity extends Activity {
 			for (int i = 0; i < arr.length; i++) {
 				int index = Arrays.binarySearch(shortStopWord, arr[i]);
 				if (index < 0 || index >= shortStopWord.length) {
-					if(!"".equalsIgnoreCase(arr[i]) && arr[i].length() > 2) {
+					if (!"".equalsIgnoreCase(arr[i]) && arr[i].length() > 2) {
 						set.add(arr[i]);
 					}
 				}
 			}
-			if(!"".equalsIgnoreCase(productName)) {
+			if (!"".equalsIgnoreCase(productName)) {
 				set.add(productName);
 			}
-			if(set.size() == 0) {
+			if (set.size() == 0) {
 				set.add(ss);
 			}
 			wordList.addAll(set);
-			
+
 			JSONArray jArr = new JSONArray();
 			for (int i = 0; i < wordList.size(); i++) {
 				jArr.put(wordList.get(i));

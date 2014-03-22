@@ -71,10 +71,12 @@ public class ResultPageDetailActivity extends Activity implements
 	private Button reportButton;
 	private Button buyButton;
 	private Button favoriteButton;
-	
+
 	private boolean isFavorite;
 
 	private ProductModel selectedItem;
+
+	private long startTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -235,6 +237,8 @@ public class ResultPageDetailActivity extends Activity implements
 			reportButton.setOnClickListener(onReportButtonClick);
 			buyButton.setOnClickListener(onBuyButtonClick);
 			favoriteButton.setOnClickListener(onFavoriteButtonClick);
+
+			startTime = System.currentTimeMillis();
 		}
 	}
 
@@ -244,28 +248,33 @@ public class ResultPageDetailActivity extends Activity implements
 		public void onClick(View v) {
 			LayoutInflater layoutInflater = LayoutInflater.from(mContext);
 			View promptsView = layoutInflater.inflate(R.layout.prompts, null);
-			
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					mContext);
 			alertDialogBuilder.setView(promptsView);
-			final EditText userInput = (EditText) promptsView.findViewById(R.id.promtsEditText);
+			final EditText userInput = (EditText) promptsView
+					.findViewById(R.id.promtsEditText);
 			alertDialogBuilder.setCancelable(false);
-			alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					progressBar.setVisibility(View.VISIBLE);
-					progressBar.bringToFront();
-					new addNewReport().execute(userInput.getText().toString());
-				}
-			});
-			alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.cancel();
-					
-				}
-			});
+			alertDialogBuilder.setPositiveButton("OK",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							progressBar.setVisibility(View.VISIBLE);
+							progressBar.bringToFront();
+							new addNewReport().execute(userInput.getText()
+									.toString());
+						}
+					});
+			alertDialogBuilder.setNegativeButton("Cancel",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+
+						}
+					});
 			AlertDialog alertDialog = alertDialogBuilder.create();
 			alertDialog.show();
 
@@ -276,35 +285,43 @@ public class ResultPageDetailActivity extends Activity implements
 
 		@Override
 		public void onClick(View v) {
+			if (System.currentTimeMillis() - startTime < 5 * 60 * 1000) {
+				AlertDialog.Builder adBuilder = new AlertDialog.Builder(
+						mContext);
+				adBuilder.setTitle("Confirmation");
+				adBuilder.setMessage("Are you sure?");
+				adBuilder.setCancelable(false);
+				adBuilder.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
 
-			AlertDialog.Builder adBuilder = new AlertDialog.Builder(mContext);
-			adBuilder.setTitle("Confirmation");
-			adBuilder.setMessage("Are you sure?");
-			adBuilder.setCancelable(false);
-			adBuilder.setPositiveButton("Yes",
-					new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
+								progressBar.setVisibility(View.VISIBLE);
+								progressBar.bringToFront();
+								new addNewOrder().execute();
 
-							progressBar.setVisibility(View.VISIBLE);
-							progressBar.bringToFront();
-							new addNewOrder().execute();
+							}
+						});
+				adBuilder.setNegativeButton("No",
+						new DialogInterface.OnClickListener() {
 
-						}
-					});
-			adBuilder.setNegativeButton("No",
-					new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.cancel();
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.cancel();
+							}
+						});
+				AlertDialog alertDialog = adBuilder.create();
+				alertDialog.show();
 
-						}
-					});
-			AlertDialog alertDialog = adBuilder.create();
-			alertDialog.show();
-
+			} else {
+				ToastUtils.getToast(mContext, "Product detail is out of date",
+						ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_LONG)
+						.show();
+			}
 		}
 	};
 
@@ -321,15 +338,15 @@ public class ResultPageDetailActivity extends Activity implements
 			}
 		}
 	};
-	
-	class  addNewReport extends AsyncTask<String, String, Integer> {
+
+	class addNewReport extends AsyncTask<String, String, Integer> {
 		private final String PARAM_reporteremail = "reporteremail";
 		private final String PARAM_targetemail = "targetemail";
 		private final String PARAM_pid = "pid";
 		private final String PARAM_extra = "extra";
-		
+
 		private final String RESULT_success = "success";
-		
+
 		@Override
 		protected Integer doInBackground(String... params) {
 
@@ -353,8 +370,7 @@ public class ResultPageDetailActivity extends Activity implements
 						selectedItem.getMerchantEmail()));
 				entity.add(new BasicNameValuePair(PARAM_pid, Integer
 						.toString(selectedItem.getProductID())));
-				entity.add(new BasicNameValuePair(PARAM_extra,
-						params[0]));
+				entity.add(new BasicNameValuePair(PARAM_extra, params[0]));
 
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(url);
@@ -423,6 +439,9 @@ public class ResultPageDetailActivity extends Activity implements
 		private final String PARAM_customeremail = "customeremail";
 		private final String PARAM_pid = "pid";
 		private final String PARAM_productlastprice = "productlastprice";
+		private final String PARAM_productshipping = "productshipping";
+		private final String PARAM_merchantemail = "merchantemail";
+		private final String PARAM_productname = "productname";
 
 		private final String RESULT_success = "success";
 
@@ -449,6 +468,12 @@ public class ResultPageDetailActivity extends Activity implements
 						.toString(selectedItem.getProductID())));
 				entity.add(new BasicNameValuePair(PARAM_productlastprice,
 						Double.toString(selectedItem.getDiscount())));
+				entity.add(new BasicNameValuePair(PARAM_productshipping, Double
+						.toString(selectedItem.getShippingCost())));
+				entity.add(new BasicNameValuePair(PARAM_merchantemail,
+						selectedItem.getMerchantEmail()));
+				entity.add(new BasicNameValuePair(PARAM_productname,
+						selectedItem.getProductName()));
 
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(url);

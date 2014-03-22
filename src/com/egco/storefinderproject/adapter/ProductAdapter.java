@@ -9,6 +9,7 @@ import com.egco.storefinder.model.ProductModel;
 import com.egco.storefinder.widget.ProductView;
 import com.egco.storefinderproject.activity.ResultPageDetailActivity;
 import com.egco.storefinderproject.constant.ApplicationConstant;
+import com.egco.storefinderproject.utils.ToastUtils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,22 +28,27 @@ public class ProductAdapter extends BaseAdapter {
 	private Context mContext;
 	private int baseSize;
 	private long percentile80;
+	private long queryTime;
 
-	public ProductAdapter(Context context,int tBaseSize) {
+	public ProductAdapter(Context context, int tBaseSize) {
 		productList = new ArrayList<ProductModel>();
 		this.mContext = context;
 		this.baseSize = tBaseSize;
 	}
-	
+
 	public void setProductList(ArrayList<ProductModel> productList) {
 		this.productList = productList;
-		
+
 		long poularity[] = new long[productList.size()];
-		for(int i=0;i<poularity.length;i++)
+		for (int i = 0; i < poularity.length; i++)
 			poularity[i] = productList.get(i).getPopularity();
 		Arrays.sort(poularity);
-		percentile80 = poularity[(int)(Math.floor(0.8*poularity.length))];
-		Log.v("TAGGGGGGGG", "popularity ======= "+percentile80);
+		percentile80 = poularity[(int) (Math.floor(0.8 * poularity.length))];
+		Log.v("TAGGGGGGGG", "popularity ======= " + percentile80);
+	}
+
+	public void setQueryTime(long queryTime) {
+		this.queryTime = queryTime;
 	}
 
 	@Override
@@ -73,53 +79,67 @@ public class ProductAdapter extends BaseAdapter {
 		}
 		return null;
 	}
-	
+
 	public ArrayList<View> getViewList() {
 		ArrayList<View> viewList = new ArrayList<View>();
-		for(int i=0;i<productList.size();i++) {
+		for (int i = 0; i < productList.size(); i++) {
 			ProductModel item = productList.get(i);
 			ProductView productView = new ProductView(mContext);
 			productView.setId(item.getProductID());
-			
+
 			// TODO: unmocking
-			if(item.getPopularity() > percentile80) {
-				productView.setProductImageByURL(item.getProductImgURLFullPath(), baseSize*2, baseSize*2);
-				
+			if (item.getPopularity() > percentile80) {
+				productView.setProductImageByURL(
+						item.getProductImgURLFullPath(), baseSize * 2,
+						baseSize * 2);
+
 				GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
 				layoutParams.width = baseSize * 2;
 				layoutParams.height = baseSize * 2;
 				layoutParams.rowSpec = GridLayout.spec(Integer.MIN_VALUE, 2);
 				layoutParams.columnSpec = GridLayout.spec(Integer.MIN_VALUE, 2);
-				
+
 				productView.setLayoutParams(layoutParams);
 				productView.setBiggerFont();
 			} else {
-				productView.setProductImageByURL(item.getProductImgURLFullPath(), baseSize, baseSize);
-				
+				productView.setProductImageByURL(
+						item.getProductImgURLFullPath(), baseSize, baseSize);
+
 				GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
 				layoutParams.width = baseSize * 1;
 				layoutParams.height = baseSize * 1;
 				layoutParams.rowSpec = GridLayout.spec(Integer.MIN_VALUE, 1);
 				layoutParams.columnSpec = GridLayout.spec(Integer.MIN_VALUE, 1);
-				
+
 				productView.setLayoutParams(layoutParams);
 			}
-			productView.setPriceAndDiscount(item.getPrice(), item.getDiscount());
+			productView
+					.setPriceAndDiscount(item.getPrice(), item.getDiscount());
 			productView.setShipping(item.getShippingCost());
-			
+
 			productView.setOnClickListener(onProductClickListener);
 			viewList.add(productView);
 		}
 		return viewList;
 	}
-	
+
 	OnClickListener onProductClickListener = new OnClickListener() {
-		
+
 		@Override
 		public void onClick(View v) {
-			Intent intent = new Intent(mContext, ResultPageDetailActivity.class);
-			intent.putExtra(ApplicationConstant.INTENT_PRODUCT_MODEL, getProductModelFromID(v.getId()));
-			mContext.startActivity(intent);
+			Log.v("Time", " " + (System.currentTimeMillis() - queryTime));
+			if (System.currentTimeMillis() - queryTime < (2.5 * 60 * 1000)) {
+				Intent intent = new Intent(mContext,
+						ResultPageDetailActivity.class);
+				intent.putExtra(ApplicationConstant.INTENT_PRODUCT_MODEL,
+						getProductModelFromID(v.getId()));
+				mContext.startActivity(intent);
+			} else {
+				ToastUtils.getToast(mContext,
+						"Query is out of date,Please re-query",
+						ToastUtils.STYLE_INFO_BLUE, ToastUtils.DURATION_LONG)
+						.show();
+			}
 
 		}
 	};

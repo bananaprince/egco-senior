@@ -71,6 +71,15 @@
                     android:padding="5dp"
                     android:src="@drawable/search_50" />
             </LinearLayout>
+            
+            <TextView 
+                android:id="@+id/resultpage_search_submit_query_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:padding="3dp"
+                android:text="As of"
+                style="@style/xSmallBlackTextBold"/>
         </LinearLayout>
 
         <ScrollView
